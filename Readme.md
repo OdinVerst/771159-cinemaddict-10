@@ -1,8 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Сергей Раздолянский](https://up.htmlacademy.ru/ecmascript/10/user/771159).
-* Наставник: `Неизвестно`.
-
+* Наставник: [Семён Якушев](https://htmlacademy.ru/profile/id1118791).
 ---
 
 _Не удаляйте и не изменяйте папки и файлы:_
