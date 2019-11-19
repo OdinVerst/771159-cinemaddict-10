@@ -59,8 +59,8 @@ const templateListFilmsComment = () => {
     <div class="films-list__container"></div>
     </section>`);
 
-  const ratedContainer = listComment.querySelector(`.films-list__container`);
-  render(ratedContainer, templateCardFilm());
+  const commentContainer = listComment.querySelector(`.films-list__container`);
+  render(commentContainer, templateCardFilm());
 
   return listComment.innerHTML;
 };
