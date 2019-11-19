@@ -48,7 +48,11 @@ const templateListFilmsRated = () => {
     </section>`);
 
   const ratedContainer = listRated.querySelector(`.films-list__container`);
-  render(ratedContainer, templateCardFilm());
+  const COUNT_FILMS_RATED = 2;
+
+  new Array(COUNT_FILMS_RATED).fill(``).forEach(() => {
+    render(ratedContainer, templateCardFilm());
+  });
 
   return listRated.innerHTML;
 };
@@ -60,7 +64,11 @@ const templateListFilmsComment = () => {
     </section>`);
 
   const commentContainer = listComment.querySelector(`.films-list__container`);
-  render(commentContainer, templateCardFilm());
+  const COUNT_FILMS_COMMENT = 2;
+
+  new Array(COUNT_FILMS_COMMENT).fill(``).forEach(() => {
+    render(commentContainer, templateCardFilm());
+  });
 
   return listComment.innerHTML;
 };
