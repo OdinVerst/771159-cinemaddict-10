@@ -31,15 +31,38 @@ const templateListFilms = () => {
       <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
       <div class="films-list__container"></div>
     </section>
-    <section class="films-list--extra">
-      <h2 class="films-list__title">Top rated</h2>
-      <div class="films-list__container"></div>
-    </section>
-    <section class="films-list--extra">
-      <h2 class="films-list__title">Most commented</h2>
-      <div class="films-list__container"></div>
-    </section>
   </section>`;
+};
+
+const createTemplateList = (content) => {
+  const listContent = document.createElement(`div`);
+  render(listContent, content);
+
+  return listContent;
+};
+
+const templateListFilmsRated = () => {
+  const listRated = createTemplateList(`<section class="films-list--extra">
+    <h2 class="films-list__title">Top rated</h2>
+    <div class="films-list__container"></div>
+    </section>`);
+
+  const ratedContainer = listRated.querySelector(`.films-list__container`);
+  render(ratedContainer, templateCardFilm());
+
+  return listRated.innerHTML;
+};
+
+const templateListFilmsComment = () => {
+  const listComment = createTemplateList(`<section class="films-list--extra">
+    <h2 class="films-list__title">Most commented</h2>
+    <div class="films-list__container"></div>
+    </section>`);
+
+  const ratedContainer = listComment.querySelector(`.films-list__container`);
+  render(ratedContainer, templateCardFilm());
+
+  return listComment.innerHTML;
 };
 
 const templateBtnMore = () => {
@@ -256,15 +279,12 @@ const COUNT_FILMS = 5;
 
 new Array(COUNT_FILMS).fill(``).forEach(() => render(filmContainer, templateCardFilm()));
 
+const films = document.querySelector(`.films`);
 const filmList = document.querySelector(`.films-list`);
 
 render(filmList, templateBtnMore());
-
-const filmContainersExtra = document.querySelectorAll(`.films-list--extra .films-list__container`);
-
-[...filmContainersExtra].forEach((container) => {
-  render(container, templateCardFilm());
-});
+render(films, templateListFilmsRated());
+render(films, templateListFilmsComment());
 
 const body = document.querySelector(`body`);
 
