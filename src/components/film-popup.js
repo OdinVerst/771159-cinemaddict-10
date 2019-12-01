@@ -1,8 +1,10 @@
-const createCommentsMarkup = comments => {
-  return comments.map(comment => {
-    const { name, text, date, emoji } = comment;
+import {moreTen} from "../utils";
 
-    const formatDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+const createCommentsMarkup = (comments) => {
+  return comments.map((comment) => {
+    const {name, text, date, emoji} = comment;
+
+    const formatDate = `${date.getFullYear()}/${moreTen(date.getMonth() + 1)}/${moreTen(date.getDate())} ${moreTen(date.getHours())}:${moreTen(date.getMinutes())}`;
     return `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
@@ -25,13 +27,16 @@ export const templateFilmPopup = film => {
     rating,
     duration,
     description,
+    date,
     year,
     poster,
     genre,
+    age,
     isFavorite,
     isWatched,
     isWatchlis,
-    comments
+    comments,
+    contry
   } = film;
 
   const commentsMarkup = createCommentsMarkup(comments);
@@ -46,7 +51,7 @@ export const templateFilmPopup = film => {
           <div class="film-details__poster">
             <img class="film-details__poster-img" src="./${poster}" alt="">
 
-            <p class="film-details__age">18+</p>
+            <p class="film-details__age">${age}</p>
           </div>
 
           <div class="film-details__info">
@@ -76,7 +81,7 @@ export const templateFilmPopup = film => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">30 March 1945</td>
+                <td class="film-details__cell">${date} ${year}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
@@ -84,7 +89,7 @@ export const templateFilmPopup = film => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
-                <td class="film-details__cell">USA</td>
+                <td class="film-details__cell">${contry}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Genres</td>
@@ -100,13 +105,13 @@ export const templateFilmPopup = film => {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+          <input type="checkbox" ${isWatchlis ? `checked` : ``} class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
           <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+          <input type="checkbox" ${isWatched ? `checked` : ``} class="film-details__control-input visually-hidden" id="watched" name="watched">
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+          <input type="checkbox" ${isFavorite ? `checked` : ``} class="film-details__control-input visually-hidden" id="favorite" name="favorite">
           <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
         </section>
       </div>

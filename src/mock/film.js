@@ -24,6 +24,8 @@ export const generateFilm = () => {
   return {
     name: getRandomArrayElement(FilmsNames),
     rating: (getRandomInteger(10, 100) / 10).toFixed(1),
+    date: `10 March`,
+    age: `16+`,
     year: getRandomInteger(1900, 2020),
     duration: getRandomDuration(),
     genre: getRandomArrayElement(FilmsGenre),
@@ -32,6 +34,7 @@ export const generateFilm = () => {
     isFavorite: getRandomArrayElement(BoolVals),
     isWatched: getRandomArrayElement(BoolVals),
     isWatchlis: getRandomArrayElement(BoolVals),
-    comments: generateCommenst()
+    comments: generateCommenst(),
+    contry: `USA`
   };
 };

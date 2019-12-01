@@ -5,7 +5,7 @@ import {templateFilmCard} from './components/film-card';
 import {templateFilmsList} from './components/film-list';
 import {templateBtnMore} from './components/btn-more';
 import {templateFilmPopup} from './components/film-popup';
-import { generateFilm } from './mock/film';
+import {generateFilm} from './mock/film';
 
 const render = (container, template) => {
   container.insertAdjacentHTML(`beforeend`, template);
