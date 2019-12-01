@@ -40,4 +40,12 @@ export const UsersNames = [`John Doe`, `Tim Macoveev`, `Dan Abramov`, `Alex Sush
 
 export const UsersEmoji = [`sleeping`, `smile`, `puke`, `angry`];
 
+export const Directors = [`Quentin Tarantino`, `Hayao Miyazaki`, `Alejandro G. Iñárritu`, `Christopher Nolan`, `Denis Villeneuve`];
+
+export const Actors = [`Wes Studi`, `Kyle MacLachlan`, `Kevin Bacon`, `Sigourney Weaver`, `Sandra Bullock`, `Clint Eastwood`, `Tommy Lee Jones`, `Morgan Freeman`, `Edward Norton`, `Brittany Murphy`];
+
+export const Contrys = [`Canada`, `USA`, `France`];
+
+export const Ages = [`16+`, ` 18+`, `12+`];
+
 export const UserComments = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`, `Almost two hours? Seriously?`];

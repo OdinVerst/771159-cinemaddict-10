@@ -21,9 +21,19 @@ const createCommentsMarkup = (comments) => {
   }).join(``);
 };
 
-export const templateFilmPopup = film => {
+const createWritersMarkup = (set) => {
+  console.log(set);
+  let result = ``;
+  for (let item of set) {
+    result += ` ${item}`;
+  }
+  return result;
+};
+
+export const templateFilmPopup = (film) => {
   const {
     name,
+    director,
     rating,
     duration,
     description,
@@ -36,8 +46,13 @@ export const templateFilmPopup = film => {
     isWatched,
     isWatchlis,
     comments,
-    contry
+    contry,
+    writers,
+    actors
   } = film;
+
+  const writersMarkup = createWritersMarkup(writers);
+  const actorsMarkup = createWritersMarkup(actors);
 
   const commentsMarkup = createCommentsMarkup(comments);
 
@@ -69,15 +84,15 @@ export const templateFilmPopup = film => {
             <table class="film-details__table">
               <tr class="film-details__row">
                 <td class="film-details__term">Director</td>
-                <td class="film-details__cell">Anthony Mann</td>
+                <td class="film-details__cell">${director}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Writers</td>
-                <td class="film-details__cell">Anne Wigton, Heinz Herald, Richard Weil</td>
+                <td class="film-details__cell">${writersMarkup}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Actors</td>
-                <td class="film-details__cell">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</td>
+                <td class="film-details__cell">${actorsMarkup}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
