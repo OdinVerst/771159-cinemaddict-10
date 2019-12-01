@@ -37,7 +37,5 @@ const extraFilmsContainer = document.querySelectorAll(`.films-list--extra .films
 
 const body = document.querySelector(`body`);
 
-// render(body, templateFilmPopup());
-
-console.log(generateFilm());
+render(body, templateFilmPopup(generateFilm()));
 
