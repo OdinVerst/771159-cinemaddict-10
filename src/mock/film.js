@@ -60,11 +60,17 @@ export const generateFilm = () => {
     description: getRandomDescription(FilmsDescriptons),
     isFavorite: getRandomArrayElement(BoolVals),
     isWatched: getRandomArrayElement(BoolVals),
-    isWatchlis: getRandomArrayElement(BoolVals),
+    isWatchlist: getRandomArrayElement(BoolVals),
     comments: generateCommenst(),
     contry: getRandomArrayElement(Contrys),
     director: getRandomArrayElement(Directors),
     writers: new Set(getRandomWriters()),
     actors: new Set(getRandomActors())
   };
+};
+
+export const generateFilms = (count) => {
+  return [...new Array(count)].map(()=> {
+    return generateFilm();
+  });
 };
