@@ -59,7 +59,7 @@ const body = document.querySelector(`body`);
 const footer = document.querySelector(`.footer`);
 render(footer, templateFooterStatistic(COUNT_FILMS));
 
-// render(body, templateFilmPopup(generateFilm()));
+render(body, templateFilmPopup(generateFilm()));
 
 const loadMoreButton = main.querySelector(`.films-list__show-more`);
 loadMoreButton.addEventListener(`click`, () => {
