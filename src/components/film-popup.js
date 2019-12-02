@@ -1,12 +1,17 @@
-import {moreTen} from "../utils";
-import {MonthNames} from "../const";
+import { normalizeSingleDigit } from "../utils";
+import { MonthNames } from "../const";
 
-const createCommentsMarkup = (comments) => {
-  return comments.map((comment) => {
-    const {name, text, date, emoji} = comment;
+const createCommentsMarkup = comments => {
+  return comments
+    .map(comment => {
+      const { name, text, date, emoji } = comment;
 
-    const formatDate = `${date.getFullYear()}/${moreTen(date.getMonth() + 1)}/${moreTen(date.getDate())} ${moreTen(date.getHours())}:${moreTen(date.getMinutes())}`;
-    return `<li class="film-details__comment">
+      const formatDate = `${date.getFullYear()}/${normalizeSingleDigit(
+        date.getMonth() + 1
+      )}/${normalizeSingleDigit(date.getDate())} ${normalizeSingleDigit(
+        date.getHours()
+      )}:${normalizeSingleDigit(date.getMinutes())}`;
+      return `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
         </span>
@@ -19,10 +24,11 @@ const createCommentsMarkup = (comments) => {
           </p>
         </div>
       </li>`;
-  }).join(``);
+    })
+    .join(``);
 };
 
-const createListMarkup = (list) => {
+const createListMarkup = list => {
   let result = ``;
   for (let item of list) {
     result += ` ${item}`;
@@ -30,24 +36,41 @@ const createListMarkup = (list) => {
   return result;
 };
 
-const createGenreMarkup = (genres) => {
+const createGenreMarkup = genres => {
   return genres
-    .map((genre) => {
+    .map(genre => {
       return `<span class="film-details__genre">${genre}</span>`;
     })
     .join(`\n`);
 };
 
-export const templateFilmPopup = (film) => {
+export const templateFilmPopup = film => {
   const {
-    name, director, rating, duration, description, relaese, poster, genre, age, isFavorite, isWatched, isWatchlis, comments, contry, writers, actors
+    name,
+    director,
+    rating,
+    duration,
+    description,
+    relaese,
+    poster,
+    genre,
+    age,
+    isFavorite,
+    isWatched,
+    isWatchlis,
+    comments,
+    contry,
+    writers,
+    actors
   } = film;
 
   const writersMarkup = createListMarkup(writers);
   const actorsMarkup = createListMarkup(actors);
   const genreMarkup = createGenreMarkup(Array.from(genre));
 
-  const formatRelease = `${relaese.getDate()} ${MonthNames[relaese.getMonth() + 1]} ${relaese.getFullYear()}`;
+  const formatRelease = `${relaese.getDate()} ${
+    MonthNames[relaese.getMonth() + 1]
+  } ${relaese.getFullYear()}`;
 
   const commentsMarkup = createCommentsMarkup(comments);
 
@@ -113,20 +136,28 @@ export const templateFilmPopup = (film) => {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" ${isWatchlis ? `checked` : ``} class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+          <input type="checkbox" ${
+            isWatchlis ? `checked` : ``
+          } class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
           <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-          <input type="checkbox" ${isWatched ? `checked` : ``} class="film-details__control-input visually-hidden" id="watched" name="watched">
+          <input type="checkbox" ${
+            isWatched ? `checked` : ``
+          } class="film-details__control-input visually-hidden" id="watched" name="watched">
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-          <input type="checkbox" ${isFavorite ? `checked` : ``} class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+          <input type="checkbox" ${
+            isFavorite ? `checked` : ``
+          } class="film-details__control-input visually-hidden" id="favorite" name="favorite">
           <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
         </section>
       </div>
 
       <div class="form-details__bottom-container">
         <section class="film-details__comments-wrap">
-          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${
+            comments.length
+          }</span></h3>
 
           <ul class="film-details__comments-list">
             ${commentsMarkup}

@@ -9,6 +9,8 @@ import {generateFilm, generateFilms} from './mock/film';
 import {generateNavigate} from './mock/navigate';
 import {templateFooterStatistic} from './components/footer-statistic';
 import {generateUserRating} from './mock/user-rating';
+import {getTopFilms} from './utils';
+import {templateExtraFilms} from './components/film-extra-lis';
 
 const render = (container, template) => {
   container.insertAdjacentHTML(`beforeend`, template);
@@ -19,7 +21,6 @@ const header = document.querySelector(`.header`);
 
 const COUNT_FILMS = 22;
 const SHOWING_FILMS_COUNT_ON_ITERATION = 5;
-const COUNT_EXTRA_FILMS = 2;
 let filmsOnList = SHOWING_FILMS_COUNT_ON_ITERATION;
 
 const ALL_FILMS = generateFilms(COUNT_FILMS);
@@ -48,11 +49,18 @@ const filmList = document.querySelector(`.films-list`);
 
 render(filmList, templateBtnMore());
 
-const extraFilmsContainer = document.querySelectorAll(`.films-list--extra .films-list__container`);
+const extraFilmsContainer = document.querySelector(`.films`);
 
-[...extraFilmsContainer].forEach((container) => {
-  [...new Array(COUNT_EXTRA_FILMS)].forEach(() => render(container, templateFilmCard(generateFilm())));
-});
+const topCommentsFilms = getTopFilms(ALL_FILMS, `comments`);
+const topRatingFilms = getTopFilms(ALL_FILMS, `rating`);
+
+if (topRatingFilms) {
+  render(extraFilmsContainer, templateExtraFilms(`Top rated`, topRatingFilms));
+}
+
+if (topCommentsFilms) {
+  render(extraFilmsContainer, templateExtraFilms(`Most commented`, topCommentsFilms));
+}
 
 const body = document.querySelector(`body`);
 
