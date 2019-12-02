@@ -8,6 +8,7 @@ import {templateFilmPopup} from './components/film-popup';
 import {generateFilm, generateFilms} from './mock/film';
 import {generateNavigate} from './mock/navigate';
 import { templateFooterStatistic } from './components/footer-statistic';
+import { generateUserRating } from './mock/user-rating';
 
 const render = (container, template) => {
   container.insertAdjacentHTML(`beforeend`, template);
@@ -23,7 +24,7 @@ let filmsOnList = SHOWING_FILMS_COUNT_ON_ITERATION;
 
 const ALL_FILMS = generateFilms(COUNT_FILMS);
 
-render(header, templateUserProfile());
+render(header, templateUserProfile(generateUserRating(ALL_FILMS)));
 render(main, templateNavigate(generateNavigate(ALL_FILMS)));
 render(main, temlateFilter());
 render(main, templateFilmsList());
