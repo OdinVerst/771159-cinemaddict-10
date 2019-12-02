@@ -7,8 +7,8 @@ import {templateBtnMore} from './components/btn-more';
 import {templateFilmPopup} from './components/film-popup';
 import {generateFilm, generateFilms} from './mock/film';
 import {generateNavigate} from './mock/navigate';
-import { templateFooterStatistic } from './components/footer-statistic';
-import { generateUserRating } from './mock/user-rating';
+import {templateFooterStatistic} from './components/footer-statistic';
+import {generateUserRating} from './mock/user-rating';
 
 const render = (container, template) => {
   container.insertAdjacentHTML(`beforeend`, template);
