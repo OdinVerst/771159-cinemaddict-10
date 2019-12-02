@@ -41,13 +41,19 @@ const getRandomGenres = () => {
   });
 };
 
+const getRandomReleaseDate = () => {
+  const start = new Date(1930, 0, 1);
+  const end = new Date();
+
+  return new Date(getRandomInteger(start.getTime(), end.getTime()));
+};
+
 export const generateFilm = () => {
   return {
     name: getRandomArrayElement(FilmsNames),
     rating: (getRandomInteger(10, 100) / 10).toFixed(1),
-    date: `10 March`,
     age: getRandomArrayElement(Ages),
-    year: getRandomInteger(1900, 2020),
+    relaese: getRandomReleaseDate(),
     duration: getRandomDuration(),
     genre: new Set(getRandomGenres()),
     poster: getRandomArrayElement(FilmsPoster),

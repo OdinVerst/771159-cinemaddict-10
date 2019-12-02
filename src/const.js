@@ -34,6 +34,21 @@ export const FilmsDescriptons = [
   `Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
 ];
 
+export const MonthNames = [
+  `January`,
+  `February`,
+  `March`,
+  `April`,
+  `May`,
+  `June`,
+  `July`,
+  `August`,
+  `September`,
+  `October`,
+  `November`,
+  `December`
+];
+
 export const FilmsGenre = [`Adventure`, `Comedy`, `Drama`, `Horror`];
 
 export const UsersNames = [`John Doe`, `Tim Macoveev`, `Dan Abramov`, `Alex Sushko`];

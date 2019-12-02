@@ -1,4 +1,5 @@
 import {moreTen} from "../utils";
+import {MonthNames} from "../const";
 
 const createCommentsMarkup = (comments) => {
   return comments.map((comment) => {
@@ -21,38 +22,32 @@ const createCommentsMarkup = (comments) => {
   }).join(``);
 };
 
-const createWritersMarkup = (set) => {
-  console.log(set);
+const createListMarkup = (list) => {
   let result = ``;
-  for (let item of set) {
+  for (let item of list) {
     result += ` ${item}`;
   }
   return result;
 };
 
+const createGenreMarkup = (genres) => {
+  return genres
+    .map((genre) => {
+      return `<span class="film-details__genre">${genre}</span>`;
+    })
+    .join(`\n`);
+};
+
 export const templateFilmPopup = (film) => {
   const {
-    name,
-    director,
-    rating,
-    duration,
-    description,
-    date,
-    year,
-    poster,
-    genre,
-    age,
-    isFavorite,
-    isWatched,
-    isWatchlis,
-    comments,
-    contry,
-    writers,
-    actors
+    name, director, rating, duration, description, relaese, poster, genre, age, isFavorite, isWatched, isWatchlis, comments, contry, writers, actors
   } = film;
 
-  const writersMarkup = createWritersMarkup(writers);
-  const actorsMarkup = createWritersMarkup(actors);
+  const writersMarkup = createListMarkup(writers);
+  const actorsMarkup = createListMarkup(actors);
+  const genreMarkup = createGenreMarkup(Array.from(genre));
+
+  const formatRelease = `${relaese.getDate()} ${MonthNames[relaese.getMonth() + 1]} ${relaese.getFullYear()}`;
 
   const commentsMarkup = createCommentsMarkup(comments);
 
@@ -73,7 +68,7 @@ export const templateFilmPopup = (film) => {
             <div class="film-details__info-head">
               <div class="film-details__title-wrap">
                 <h3 class="film-details__title">${name}</h3>
-                <p class="film-details__title-original">Original: The Great Flamarion</p>
+                <p class="film-details__title-original">Original: ${name}</p>
               </div>
 
               <div class="film-details__rating">
@@ -96,7 +91,7 @@ export const templateFilmPopup = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${date} ${year}</td>
+                <td class="film-details__cell">${formatRelease}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
@@ -109,9 +104,7 @@ export const templateFilmPopup = (film) => {
               <tr class="film-details__row">
                 <td class="film-details__term">Genres</td>
                 <td class="film-details__cell">
-                  <span class="film-details__genre">Drama</span>
-                  <span class="film-details__genre">Film-Noir</span>
-                  <span class="film-details__genre">Mystery</span></td>
+                  ${genreMarkup}
               </tr>
             </table>
 

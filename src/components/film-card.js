@@ -12,14 +12,14 @@ const getFirstGenre = (set) => {
 };
 
 export const templateFilmCard = (film) => {
-  const {name, rating, duration, description, year, poster, genre, isFavorite, isWatched, isWatchlis, comments} = film;
+  const {name, rating, duration, description, relaese, poster, genre, isFavorite, isWatched, isWatchlis, comments} = film;
   const commentsCount = comments.length;
   const mainGenre = getFirstGenre(genre);
   return `<article class="film-card">
     <h3 class="film-card__title">${name}</h3>
     <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
-      <span class="film-card__year">${year}</span>
+      <span class="film-card__year">${relaese.getFullYear()}</span>
       <span class="film-card__duration">${duration}</span>
       <span class="film-card__genre">${mainGenre}</span>
     </p>
