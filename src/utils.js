@@ -26,3 +26,7 @@ export const getTopFilms = (list, characteristic) => {
     return Number(newlist[0][characteristic]) !== 0 ? newlist.slice(0, COUNT_TOP) : false;
   }
 };
+
+export const createElement = (element) => {
+  console.log(element);
+};
