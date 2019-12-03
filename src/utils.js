@@ -1,3 +1,8 @@
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
 export const getRandomArrayElement = (array) => {
   return array[Math.floor(Math.random() * array.length)];
 };
@@ -28,5 +33,18 @@ export const getTopFilms = (list, characteristic) => {
 };
 
 export const createElement = (element) => {
-  console.log(element);
+  const newElement = document.createElement(`div`);
+  newElement.insertAdjacentHTML(RenderPosition.BEFOREEND, element);
+  return newElement.firstChild;
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
 };
