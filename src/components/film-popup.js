@@ -1,4 +1,4 @@
-import {normalizeSingleDigit} from "../utils";
+import {normalizeSingleDigit, createElement} from "../utils";
 import {MonthNames} from "../const";
 
 const createCommentsMarkup = (comments) => {
@@ -41,7 +41,7 @@ const createGenreMarkup = (genres) => {
     .join(`\n`);
 };
 
-export const templateFilmPopup = (film) => {
+const createFilmPopupTemplate = (film) => {
   const {
     name,
     director,
@@ -186,3 +186,26 @@ export const templateFilmPopup = (film) => {
     </form>
   </section>`;
 };
+
+export default class FilmPopup {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmPopupTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

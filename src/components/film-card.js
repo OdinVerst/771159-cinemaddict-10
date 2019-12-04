@@ -1,3 +1,5 @@
+import {createElement} from "../utils";
+
 const isActive = (prop) => {
   return prop ? `film-card__controls-item--active` : ``;
 };
@@ -11,7 +13,7 @@ const getFirstGenre = (set) => {
   return iterator.next().value;
 };
 
-export const templateFilmCard = (film) => {
+const createFilmCardTemplate = (film) => {
   const {name, rating, duration, description, relaese, poster, genre, isFavorite, isWatched, isWatchlis, comments} = film;
   const commentsCount = comments.length;
   const mainGenre = getFirstGenre(genre);
@@ -33,3 +35,26 @@ export const templateFilmCard = (film) => {
     </form>
   </article>`;
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
