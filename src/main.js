@@ -91,8 +91,8 @@ const extraFilmsContainer = document.querySelector(`.films`);
 const topCommentsFilms = getTopFilms(ALL_FILMS, `comments`);
 const topRatingFilms = getTopFilms(ALL_FILMS, `rating`);
 
-renderExtraFilms(extraFilmsContainer, topCommentsFilms, `Top rated`);
-renderExtraFilms(extraFilmsContainer, topRatingFilms, `Most commented`);
+renderExtraFilms(extraFilmsContainer, topRatingFilms, `Top rated`);
+renderExtraFilms(extraFilmsContainer, topCommentsFilms, `Most commented`);
 
 const footerElemet = document.querySelector(`.footer`);
 render(footerElemet, new FooterStatistic(COUNT_FILMS).getElement(), RenderPosition.BEFOREEND);
