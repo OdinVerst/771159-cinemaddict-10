@@ -72,7 +72,7 @@ const renderExtraFilms = (container, films, nameList) => {
     const filmsExtraListComponents = new FilmsExtraList(nameList);
     render(container, filmsExtraListComponents.getElement(), RenderPosition.BEFOREEND);
     const filmListContainer = filmsExtraListComponents.getElement().querySelector(`.films-list__container`);
-    topRatingFilms.slice(0, 2).forEach((film) => {
+    films.forEach((film) => {
       createFilm(filmListContainer, film);
     });
   }
