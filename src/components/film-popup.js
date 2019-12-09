@@ -1,4 +1,4 @@
-import {normalizeSingleDigit} from "../utils";
+import {normalizeSingleDigit} from "../utils/common";
 import {MonthNames} from "../const";
 import AbstractComponent from "./abstract-component";
 

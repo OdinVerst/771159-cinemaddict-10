@@ -7,6 +7,10 @@ const createFooterStatisticTemplate = (count) => {
 };
 
 export default class FooterStatistic extends AbstractComponent {
+  constructor(countFilms) {
+    super();
+    this._countFilms = countFilms;
+  }
   getTemplate() {
     return createFooterStatisticTemplate(this._countFilms);
   }

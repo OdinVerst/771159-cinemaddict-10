@@ -1,4 +1,3 @@
-
 import UserProfile from "./components/user-profile";
 import Navigate from "./components/navigate";
 import Filter from "./components/filter";
@@ -9,7 +8,8 @@ import FooterStatistic from "./components/footer-statistic";
 import {generateFilms} from './mock/film';
 import {generateNavigate} from './mock/navigate';
 import {generateUserRating} from './mock/user-rating';
-import {render, getTopFilms} from "./utils";
+import {render, remove} from "./utils/render";
+import {getTopFilms} from "./utils/common";
 import FilmsExtraList from "./components/film-extra-list";
 import FilmPopup from "./components/film-popup";
 import FilmsContainer from "./components/films-container";
@@ -111,8 +111,7 @@ if (ALL_FILMS.length) {
         renderFilms(SHOWING_FILMS_COUNT_ON_ITERATION);
       } else {
         renderFilms(balanseFilms);
-        btnMoreComponent.getElement().remove();
-        btnMoreComponent.removeElement();
+        remove(btnMoreComponent);
       }
     }
   });

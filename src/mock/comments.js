@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomArrayElement} from "../utils";
+import {getRandomInteger, getRandomArrayElement} from "../utils/common";
 import {UsersNames, UsersEmoji, UserComments} from "../const";
 
 const getRandomDate = () => {
