@@ -197,4 +197,8 @@ export default class FilmPopup extends AbstractComponent {
   getTemplate() {
     return createFilmPopupTemplate(this._film);
   }
+
+  setFilmPopupClickHandler(handler, selector) {
+    this.getElement().querySelector(selector).addEventListener(`click`, handler);
+  }
 }

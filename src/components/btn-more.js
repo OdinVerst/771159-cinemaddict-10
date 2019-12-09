@@ -8,4 +8,8 @@ export default class BtnMore extends AbstractComponent {
   getTemplate() {
     return createBtnMoreTemplate();
   }
+
+  setBtnMoreClickHandler(handler) {
+    this.getElement().addEventListener(`click`, handler);
+  }
 }

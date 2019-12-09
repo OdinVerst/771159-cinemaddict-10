@@ -37,17 +37,17 @@ if (ALL_FILMS.length) {
   const createFilm = (container, film) => {
     const filmComponent = new FilmCard(film);
     const filmElements = {
-      poster: filmComponent.getElement().querySelector(`.film-card__poster`),
-      titleFilm: filmComponent.getElement().querySelector(`.film-card__title`),
-      commentsFilm: filmComponent.getElement().querySelector(`.film-card__comments`)
+      poster: `.film-card__poster`,
+      titleFilm: `.film-card__title`,
+      commentsFilm: `.film-card__comments`
     };
 
     const filmPopupComponent = new FilmPopup(film);
-    const closeBtn = filmPopupComponent.getElement().querySelector(`.film-details__close-btn`);
+    const closeBtn = `.film-details__close-btn`;
     const popupContainer = document.querySelector(`body`);
 
     const removePopupFilm = () => {
-      popupContainer.removeChild(filmPopupComponent.getElement());
+      remove(filmPopupComponent);
     };
 
     const onEscKeyDown = (evt) => {
@@ -59,14 +59,14 @@ if (ALL_FILMS.length) {
       }
     };
 
-    const setListner = (item) => {
-      item.addEventListener(`click`, () => {
+    const setListner = (selector) => {
+      filmComponent.setFilmClickHandler(() => {
         render(popupContainer, filmPopupComponent.getElement());
+        filmPopupComponent.setFilmPopupClickHandler(removePopupFilm, closeBtn);
         document.addEventListener(`keydown`, onEscKeyDown);
-      });
+      }, selector);
     };
 
-    closeBtn.addEventListener(`click`, removePopupFilm);
     Object.values(filmElements).forEach((element)=> setListner(element));
 
     render(container, filmComponent.getElement());
@@ -104,7 +104,7 @@ if (ALL_FILMS.length) {
 
   const btnMoreComponent = new BtnMore();
   render(filmsListElement, btnMoreComponent.getElement());
-  btnMoreComponent.getElement().addEventListener(`click`, () => {
+  btnMoreComponent.setBtnMoreClickHandler(() => {
     let balanseFilms = COUNT_FILMS - filmsOnList;
     if (balanseFilms) {
       if (balanseFilms - SHOWING_FILMS_COUNT_ON_ITERATION >= 1) {
