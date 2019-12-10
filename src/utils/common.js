@@ -13,16 +13,16 @@ export const normalizeSingleDigit = (numder) => {
   return numder;
 };
 
-export const getTopFilms = (list, characteristic) => {
+export const getSortFilms = (list, characteristic, count = list.length) => {
   const isArray = Array.isArray(list[0][characteristic]);
-  const COUNT_TOP = 2;
+  const COUNT_TOP = count;
 
-  const newlist = list;
+  let newlist = [];
   if (isArray) {
-    newlist.sort((item1, item2) => item2[characteristic].length - item1[characteristic].length);
+    newlist = list.slice().sort((item1, item2) => item2[characteristic].length - item1[characteristic].length);
     return newlist[0][characteristic].length !== 0 ? newlist.slice(0, COUNT_TOP) : false;
   } else {
-    newlist.sort((item1, item2) => item2[characteristic] - item1[characteristic]);
+    newlist = list.slice().sort((item1, item2) => item2[characteristic] - item1[characteristic]);
     return Number(newlist[0][characteristic]) !== 0 ? newlist.slice(0, COUNT_TOP) : false;
   }
 };

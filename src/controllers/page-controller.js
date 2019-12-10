@@ -4,13 +4,13 @@ import FilmCard from "../components/film-card";
 import FilmPopup from "../components/film-popup";
 import FilmsExtraList from "../components/film-extra-list";
 import {render, remove} from "../utils/render";
-import {getTopFilms} from "../utils/common";
+import {getSortFilms} from "../utils/common";
 import BtnMore from "../components/btn-more";
-import Sort, { SortType } from "../components/sort";
+import Sort, {SortType} from "../components/sort";
 
 
 const SHOWING_FILMS_COUNT_ON_ITERATION = 5;
-let filmsOnList = SHOWING_FILMS_COUNT_ON_ITERATION;
+let filmsOnList = 5;
 
 const createFilm = (container, film) => {
   const filmComponent = new FilmCard(film);
@@ -52,9 +52,9 @@ const createFilm = (container, film) => {
 
 const renderFilms = (container, films, count) => {
   const itaration = Math.round(filmsOnList / SHOWING_FILMS_COUNT_ON_ITERATION);
-  const start = (itaration * SHOWING_FILMS_COUNT_ON_ITERATION);
+  const start = ((itaration - 1) * SHOWING_FILMS_COUNT_ON_ITERATION);
   const end = start + count;
-  films.slice(start, end).forEach((film) => {
+  films.slice(start, end).map((film) => {
     createFilm(container, film);
   });
   filmsOnList += count;
@@ -84,50 +84,57 @@ export default class PageController {
   render() {
 
     render(this._container, this._sortComponent);
-    this._sortComponent.setSortTypeChangeHandler((sortType)=> {
-      let sortedTasks = [];
-
-      switch (sortType) {
-        case SortType.DATE:
-          sortedTasks = this._films.slice().sort((a, b) => a.relaese - b.relaese);
-          break;
-        case SortType.RATING:
-          sortedTasks = this._films.slice().sort((a, b) => b.rating - a.rating);
-          break;
-        case SortType.DEFAULT:
-          sortedTasks = this._films;
-          break;
-      }
-
-      console.log(sortedTasks);
-    });
 
     render(this._container, this._filmsListComponent);
 
     if (this._films.length) {
+      let films = this._films;
       const filmsListElement = this._container.querySelector(`.films-list`);
       const filmsContainer = this._filmsContainerComponent;
 
       render(filmsListElement, filmsContainer);
-      renderFilms(filmsContainer.getElement(), this._films, filmsOnList);
+      renderFilms(filmsContainer.getElement(), films, filmsOnList);
+
+      this._sortComponent.setSortTypeChangeHandler((sortType)=> {
+        let sortedFilms = [];
+
+        switch (sortType) {
+          case SortType.DATE:
+            sortedFilms = getSortFilms(this._films, `relaese`);
+            break;
+          case SortType.RATING:
+            sortedFilms = getSortFilms(this._films, `rating`);
+            break;
+          case SortType.DEFAULT:
+            sortedFilms = this._films;
+            break;
+        }
+        filmsContainer.getElement().innerHTML = ``;
+        filmsOnList = 5;
+        films = sortedFilms;
+
+        renderFilms(filmsContainer.getElement(), sortedFilms, filmsOnList);
+      });
 
       const extraFilmsContainer = document.querySelector(`.films`);
-      const topCommentsFilms = getTopFilms(this._films, `comments`);
-      const topRatingFilms = getTopFilms(this._films, `rating`);
+      const COUNT_TOPFILMS = 2;
+      const topCommentsFilms = getSortFilms(films, `comments`, COUNT_TOPFILMS);
+      const topRatingFilms = getSortFilms(films, `rating`, COUNT_TOPFILMS);
 
       renderExtraFilms(extraFilmsContainer, topRatingFilms, `Top rated`);
       renderExtraFilms(extraFilmsContainer, topCommentsFilms, `Most commented`);
 
-      if (this._films.length > SHOWING_FILMS_COUNT_ON_ITERATION) {
+      if (films.length > SHOWING_FILMS_COUNT_ON_ITERATION) {
         const btnMore = this._btnMoreComponent;
         render(filmsListElement, btnMore);
+        let balanseFilms = films.length;
         btnMore.setBtnMoreClickHandler(() => {
-          let balanseFilms = this._films.length - filmsOnList;
+          balanseFilms -= SHOWING_FILMS_COUNT_ON_ITERATION;
           if (balanseFilms) {
             if (balanseFilms - SHOWING_FILMS_COUNT_ON_ITERATION >= 1) {
-              renderFilms(filmsContainer.getElement(), this._films, SHOWING_FILMS_COUNT_ON_ITERATION);
+              renderFilms(filmsContainer.getElement(), films, SHOWING_FILMS_COUNT_ON_ITERATION);
             } else {
-              renderFilms(filmsContainer.getElement(), this._films, balanseFilms);
+              renderFilms(filmsContainer.getElement(), films, balanseFilms);
               remove(btnMore);
             }
           }

@@ -50,6 +50,7 @@ const getRandomReleaseDate = () => {
 
 export const generateFilm = () => {
   return {
+    id: getRandomInteger(10, 100),
     name: getRandomArrayElement(FilmsNames),
     rating: (getRandomInteger(10, 100) / 10).toFixed(1),
     age: getRandomArrayElement(Ages),
