@@ -10,7 +10,7 @@ import Sort, {SortType} from "../components/sort";
 
 
 const SHOWING_FILMS_COUNT_ON_ITERATION = 5;
-let filmsOnList = 5;
+let filmsOnList = SHOWING_FILMS_COUNT_ON_ITERATION;
 
 const createFilm = (container, film) => {
   const filmComponent = new FilmCard(film);
