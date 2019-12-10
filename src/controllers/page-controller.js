@@ -6,6 +6,7 @@ import FilmsExtraList from "../components/film-extra-list";
 import {render, remove} from "../utils/render";
 import {getTopFilms} from "../utils/common";
 import BtnMore from "../components/btn-more";
+import Sort, { SortType } from "../components/sort";
 
 
 const SHOWING_FILMS_COUNT_ON_ITERATION = 5;
@@ -77,9 +78,30 @@ export default class PageController {
     this._filmsListComponent = new FilmsList(this._films.length);
     this._filmsContainerComponent = new FilmsContainer();
     this._btnMoreComponent = new BtnMore();
+    this._sortComponent = new Sort();
   }
 
   render() {
+
+    render(this._container, this._sortComponent);
+    this._sortComponent.setSortTypeChangeHandler((sortType)=> {
+      let sortedTasks = [];
+
+      switch (sortType) {
+        case SortType.DATE:
+          sortedTasks = this._films.slice().sort((a, b) => a.relaese - b.relaese);
+          break;
+        case SortType.RATING:
+          sortedTasks = this._films.slice().sort((a, b) => b.rating - a.rating);
+          break;
+        case SortType.DEFAULT:
+          sortedTasks = this._films;
+          break;
+      }
+
+      console.log(sortedTasks);
+    });
+
     render(this._container, this._filmsListComponent);
 
     if (this._films.length) {

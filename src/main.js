@@ -1,6 +1,5 @@
 import UserProfile from "./components/user-profile";
 import Navigate from "./components/navigate";
-import Sort from "./components/sort";
 import FooterStatistic from "./components/footer-statistic";
 import {generateFilms} from './mock/film';
 import {generateNavigate} from './mock/navigate';
@@ -16,9 +15,6 @@ const ALL_FILMS = generateFilms(COUNT_FILMS);
 
 render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));
 render(mainElement, new Navigate(generateNavigate(ALL_FILMS)));
-const sortComponent = new Sort();
-render(mainElement, sortComponent);
-sortComponent.setSortTypeChangeHandler((el)=> console.log(el));
 
 const pageController = new PageController(mainElement, ALL_FILMS);
 pageController.render();
