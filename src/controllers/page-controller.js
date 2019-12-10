@@ -131,7 +131,7 @@ export default class PageController {
             break;
         }
         filmsContainer.getElement().innerHTML = ``;
-        filmsOnList = 5;
+        filmsOnList = SHOWING_FILMS_COUNT_ON_ITERATION;
 
         renderFilms(filmsContainer.getElement(), sortedFilms);
         if (sortType === SortType.DEFAULT) {
