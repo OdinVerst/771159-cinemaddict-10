@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const createNavigateItemsMarkup = (list) => {
   return list.map((item)=>{
@@ -18,25 +18,13 @@ const createNavigateTemplate = (list) => {
   </nav>`;
 };
 
-export default class Navigate {
+export default class Navigate extends AbstractComponent {
   constructor(navigateItems) {
-    this._element = null;
+    super();
     this._navigateList = navigateItems;
   }
 
   getTemplate() {
     return createNavigateTemplate(this._navigateList);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

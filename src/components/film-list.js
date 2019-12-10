@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const createFilmsListTitleMarkup = (existFilms) => {
   const existText = `All movies. Upcoming`;
@@ -14,25 +14,13 @@ const createFilmsListTemplate = (existFilms) => {
   </section>`;
 };
 
-export default class FilmsList {
+export default class FilmsList extends AbstractComponent {
   constructor(existFilms) {
-    this._element = null;
+    super();
     this._existFilms = existFilms;
   }
 
   getTemplate() {
     return createFilmsListTemplate(this._existFilms);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

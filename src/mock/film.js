@@ -1,4 +1,4 @@
-import {getRandomArrayElement, getRandomInteger} from "../utils";
+import {getRandomArrayElement, getRandomInteger} from "../utils/common";
 import {FilmsNames, FilmsPoster, FilmsGenre, FilmsDescriptons, Directors, Actors, Ages, Contrys} from "../const";
 import {generateCommenst} from "./comments";
 

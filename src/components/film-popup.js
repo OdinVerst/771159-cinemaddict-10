@@ -1,5 +1,6 @@
-import {normalizeSingleDigit, createElement} from "../utils";
+import {normalizeSingleDigit} from "../utils/common";
 import {MonthNames} from "../const";
+import AbstractComponent from "./abstract-component";
 
 const createCommentsMarkup = (comments) => {
   return comments
@@ -187,9 +188,9 @@ const createFilmPopupTemplate = (film) => {
   </section>`;
 };
 
-export default class FilmPopup {
+export default class FilmPopup extends AbstractComponent {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
   }
 
@@ -197,15 +198,7 @@ export default class FilmPopup {
     return createFilmPopupTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setFilmPopupClickHandler(handler, selector) {
+    this.getElement().querySelector(selector).addEventListener(`click`, handler);
   }
 }
