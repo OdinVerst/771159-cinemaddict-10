@@ -2,9 +2,9 @@ import AbstractComponent from "./abstract-component";
 
 const activeClassName = `sort__button--active`;
 export const SortType = {
-  RATING: `rating`,
-  DATE: `date`,
   DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`,
 };
 
 const createSortTemlate = (active) => {
