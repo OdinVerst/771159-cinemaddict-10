@@ -16,7 +16,9 @@ const ALL_FILMS = generateFilms(COUNT_FILMS);
 
 render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));
 render(mainElement, new Navigate(generateNavigate(ALL_FILMS)));
-render(mainElement, new Sort());
+const sortComponent = new Sort();
+render(mainElement, sortComponent);
+sortComponent.setSortTypeChangeHandler((el)=> console.log(el));
 
 const pageController = new PageController(mainElement, ALL_FILMS);
 pageController.render();
