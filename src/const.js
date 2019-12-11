@@ -66,3 +66,5 @@ export const Ages = [`16+`, ` 18+`, `12+`];
 export const UserComments = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`, `Almost two hours? Seriously?`];
 
 export const UserRating = [`Movie Buff`, `Proffsessional`, `Junior`];
+
+export const COUNT_TOPFILMS = 2;

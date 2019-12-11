@@ -4,7 +4,7 @@ import FilmCard from "../components/film-card";
 import FilmPopup from "../components/film-popup";
 import FilmsExtraList from "../components/film-extra-list";
 import {render, remove} from "../utils/render";
-import {getSortFilms} from "../utils/common";
+import {getSortFilms, getSortTopFilms} from "../utils/common";
 import BtnMore from "../components/btn-more";
 import Sort, {SortType} from "../components/sort";
 
@@ -142,9 +142,8 @@ export default class PageController {
       });
 
       const extraFilmsContainer = document.querySelector(`.films`);
-      const COUNT_TOPFILMS = 2;
-      const topCommentsFilms = getSortFilms(films, `comments`, COUNT_TOPFILMS);
-      const topRatingFilms = getSortFilms(films, `rating`, COUNT_TOPFILMS);
+      const topCommentsFilms = getSortTopFilms(films, `comments`);
+      const topRatingFilms = getSortTopFilms(films, `rating`);
 
       renderExtraFilms(extraFilmsContainer, topRatingFilms, `Top rated`);
       renderExtraFilms(extraFilmsContainer, topCommentsFilms, `Most commented`);
