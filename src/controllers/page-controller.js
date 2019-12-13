@@ -7,55 +7,19 @@ import {render, remove} from "../utils/render";
 import {getSortFilms, getSortTopFilms} from "../utils/common";
 import BtnMore from "../components/btn-more";
 import Sort, {SortType} from "../components/sort";
+import MovieController from "./movie-controller";
 
 
 const SHOWING_FILMS_COUNT_ON_ITERATION = 5;
 let filmsOnList = SHOWING_FILMS_COUNT_ON_ITERATION;
-
-const createFilm = (container, film) => {
-  const filmComponent = new FilmCard(film);
-  const filmElements = {
-    poster: `.film-card__poster`,
-    titleFilm: `.film-card__title`,
-    commentsFilm: `.film-card__comments`
-  };
-
-  const filmPopupComponent = new FilmPopup(film);
-  const closeBtn = `.film-details__close-btn`;
-  const popupContainer = document.querySelector(`body`);
-
-  const removePopupFilm = () => {
-    remove(filmPopupComponent);
-  };
-
-  const onEscKeyDown = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      removePopupFilm();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
-
-  const setListner = (selector) => {
-    filmComponent.setFilmClickHandler(() => {
-      render(popupContainer, filmPopupComponent);
-      filmPopupComponent.setFilmPopupClickHandler(removePopupFilm, closeBtn);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    }, selector);
-  };
-
-  Object.values(filmElements).forEach((element)=> setListner(element));
-
-  render(container, filmComponent);
-};
 
 const renderFilms = (container, films, count = films.length) => {
   const itaration = Math.round(filmsOnList / SHOWING_FILMS_COUNT_ON_ITERATION);
   const start = ((itaration - 1) * SHOWING_FILMS_COUNT_ON_ITERATION);
   const end = start + count;
   films.slice(start, end).map((film) => {
-    createFilm(container, film);
+    const movieController = new MovieController(container);
+    movieController.render(film);
   });
   filmsOnList += count;
 };
@@ -66,7 +30,8 @@ const renderExtraFilms = (container, films, nameList) => {
     render(container, filmsExtraListComponents);
     const filmListContainer = filmsExtraListComponents.getElement().querySelector(`.films-list__container`);
     films.forEach((film) => {
-      createFilm(filmListContainer, film);
+      const movieController = new MovieController(filmListContainer);
+      movieController.render(film);
     });
   }
 };
