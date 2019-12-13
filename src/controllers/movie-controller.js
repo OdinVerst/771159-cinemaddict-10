@@ -3,8 +3,9 @@ import FilmPopup from "../components/film-popup";
 import {remove, render} from "../utils/render";
 
 export default class MovieController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
+    this._onDataChange = onDataChange;
 
     this._filmComponent = null;
     this._filmDetialComponent = null;
@@ -15,6 +16,12 @@ export default class MovieController {
   render(movie) {
     this._filmComponent = new FilmCard(movie);
     this._filmDetialComponent = new FilmPopup(movie);
+
+    this._filmComponent.setWatchedButtonClickHandler((evt) => {
+      evt.preventDefault();
+      const updateMovie = Object.assign({}, movie, {isWatched: !movie.isWatched});
+      this._onDataChange(this, movie, updateMovie);
+    });
 
     const filmElements = {
       poster: `.film-card__poster`,
