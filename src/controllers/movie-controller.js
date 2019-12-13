@@ -23,6 +23,18 @@ export default class MovieController {
       this._onDataChange(this, movie, updateMovie);
     });
 
+    this._filmComponent.setWatchlistButtonClickHandler((evt) => {
+      evt.preventDefault();
+      const updateMovie = Object.assign({}, movie, {isWatchlist: !movie.isWatchlist});
+      this._onDataChange(this, movie, updateMovie);
+    });
+
+    this._filmComponent.setFavoriteButtonClickHandler((evt) => {
+      evt.preventDefault();
+      const updateMovie = Object.assign({}, movie, {isFavorite: !movie.isFavorite});
+      this._onDataChange(this, movie, updateMovie);
+    });
+
     const filmElements = {
       poster: `.film-card__poster`,
       titleFilm: `.film-card__title`,

@@ -38,6 +38,9 @@ export default class PageController {
   constructor(container, films) {
     this._container = container;
     this._films = films;
+
+    this._onDataChange = this._onDataChange.bind(this);
+
     this._filmsListComponent = new FilmsList(this._films.length);
     this._filmsContainerComponent = new FilmsContainer();
     this._btnMoreComponent = new BtnMore();
@@ -115,7 +118,13 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    console.log(oldData);
-    console.log(newData);
+    const index = this._films.findIndex((item) => item === oldData);
+
+    if (index === -1) {
+      return;
+    }
+    // console.log(movieController);
+    this._films[index] = newData;
+    movieController.render(this._films[index]);
   }
 }

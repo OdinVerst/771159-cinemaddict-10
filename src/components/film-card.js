@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const isActive = (prop) => {
   return prop ? `film-card__controls-item--active` : ``;
@@ -14,7 +14,7 @@ const getFirstGenre = (set) => {
 };
 
 const createFilmCardTemplate = (film) => {
-  const {name, rating, duration, description, relaese, poster, genre, isFavorite, isWatched, isWatchlis, comments} = film;
+  const {name, rating, duration, description, relaese, poster, genre, isFavorite, isWatched, isWatchlist, comments} = film;
   const commentsCount = comments.length;
   const mainGenre = getFirstGenre(genre);
   return `<article class="film-card">
@@ -29,14 +29,14 @@ const createFilmCardTemplate = (film) => {
     <p class="film-card__description">${cropDescription(description)}</p>
     <a class="film-card__comments">${commentsCount} comments</a>
     <form class="film-card__controls">
-      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isActive(isWatchlis)}">Add to watchlist</button>
+      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isActive(isWatchlist)}">Add to watchlist</button>
       <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isActive(isWatched)}">Mark as watched</button>
       <button class="film-card__controls-item button film-card__controls-item--favorite ${isActive(isFavorite)}">Mark as favorite</button>
     </form>
   </article>`;
 };
 
-export default class FilmCard extends AbstractComponent {
+export default class FilmCard extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
@@ -44,6 +44,10 @@ export default class FilmCard extends AbstractComponent {
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
+  }
+
+  recoveryListeners() {
+    return false;
   }
 
   setFilmClickHandler(handler, selector) {
