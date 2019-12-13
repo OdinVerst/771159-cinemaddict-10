@@ -1,6 +1,6 @@
 import FilmCard from "../components/film-card";
 import FilmPopup from "../components/film-popup";
-import {remove, render} from "../utils/render";
+import {remove, render, replace} from "../utils/render";
 
 export default class MovieController {
   constructor(container, onDataChange) {
@@ -9,11 +9,15 @@ export default class MovieController {
 
     this._filmComponent = null;
     this._filmDetialComponent = null;
+
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._removePopupFilm = this._removePopupFilm.bind(this);
   }
 
   render(movie) {
+    const oldFilmComponent = this._filmComponent;
+    const oldfilmDetialComponent = this._filmDetialComponent;
+
     this._filmComponent = new FilmCard(movie);
     this._filmDetialComponent = new FilmPopup(movie);
 
@@ -47,7 +51,12 @@ export default class MovieController {
       this._setListners(element, popupContainer, closeButton);
     });
 
-    render(this._container, this._filmComponent);
+    if (oldfilmDetialComponent && oldFilmComponent) {
+      replace(this._filmComponent, oldFilmComponent);
+      replace(this._filmDetialComponent, oldfilmDetialComponent);
+    } else {
+      render(this._container, this._filmComponent);
+    }
   }
 
   _setListners(selector, container, closeButton) {
