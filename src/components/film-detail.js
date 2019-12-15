@@ -55,7 +55,7 @@ const createFilmPopupTemplate = (film) => {
     age,
     isFavorite,
     isWatched,
-    isWatchlis,
+    isWatchlist,
     comments,
     contry,
     writers,
@@ -134,7 +134,7 @@ const createFilmPopupTemplate = (film) => {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" ${isWatchlis ? `checked` : ``} class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+          <input type="checkbox" ${isWatchlist ? `checked` : ``} class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
           <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
           <input type="checkbox" ${isWatched ? `checked` : ``} class="film-details__control-input visually-hidden" id="watched" name="watched">
@@ -188,7 +188,7 @@ const createFilmPopupTemplate = (film) => {
   </section>`;
 };
 
-export default class FilmPopup extends AbstractComponent {
+export default class FilmDetail extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
@@ -200,5 +200,20 @@ export default class FilmPopup extends AbstractComponent {
 
   setFilmPopupClickHandler(handler, selector) {
     this.getElement().querySelector(selector).addEventListener(`click`, handler);
+  }
+
+  setWatchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`#watchlist`)
+      .addEventListener(`click`, handler);
+  }
+
+  setWatchedButtonClickHandler(handler) {
+    this.getElement().querySelector(`#watched`)
+      .addEventListener(`click`, handler);
+  }
+
+  setFavoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`#favorite`)
+      .addEventListener(`click`, handler);
   }
 }

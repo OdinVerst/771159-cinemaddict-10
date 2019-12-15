@@ -1,5 +1,5 @@
 import FilmCard from "../components/film-card";
-import FilmPopup from "../components/film-popup";
+import FilmDetail from "../components/film-detail";
 import {remove, render, replace} from "../utils/render";
 
 export default class MovieController {
@@ -19,24 +19,13 @@ export default class MovieController {
     const oldFilmDetialComponent = this._filmDetialComponent;
 
     this._filmComponent = new FilmCard(movie);
-    this._filmDetialComponent = new FilmPopup(movie);
+    this._filmDetialComponent = new FilmDetail(movie);
 
-    this._filmComponent.setWatchedButtonClickHandler((evt) => {
-      evt.preventDefault();
-      const updateMovie = Object.assign({}, movie, {isWatched: !movie.isWatched});
-      this._onDataChange(this, movie, updateMovie);
-    });
+    const Controls = [`Watched`, `Watchlist`, `Favorite`];
 
-    this._filmComponent.setWatchlistButtonClickHandler((evt) => {
-      evt.preventDefault();
-      const updateMovie = Object.assign({}, movie, {isWatchlist: !movie.isWatchlist});
-      this._onDataChange(this, movie, updateMovie);
-    });
-
-    this._filmComponent.setFavoriteButtonClickHandler((evt) => {
-      evt.preventDefault();
-      const updateMovie = Object.assign({}, movie, {isFavorite: !movie.isFavorite});
-      this._onDataChange(this, movie, updateMovie);
+    Controls.forEach((control)=> {
+      this._setListnersClickButton(this._filmComponent, control, movie);
+      this._setListnersClickButton(this._filmDetialComponent, control, movie);
     });
 
     const filmElements = {
@@ -48,7 +37,7 @@ export default class MovieController {
     const closeButton = `.film-details__close-btn`;
 
     Object.values(filmElements).forEach((element)=> {
-      this._setListners(element, popupContainer, closeButton);
+      this._setListnersOpenDetail(element, popupContainer, closeButton);
     });
 
     if (oldFilmDetialComponent && oldFilmComponent) {
@@ -59,12 +48,21 @@ export default class MovieController {
     }
   }
 
-  _setListners(selector, container, closeButton) {
+  _setListnersOpenDetail(selector, container, closeButton) {
     this._filmComponent.setFilmClickHandler(() => {
       render(container, this._filmDetialComponent);
       this._filmDetialComponent.setFilmPopupClickHandler(this._removePopupFilm, closeButton);
       document.addEventListener(`keydown`, this._onEscKeyDown);
     }, selector);
+  }
+
+  _setListnersClickButton(component, type, movie) {
+    component[`set${type}ButtonClickHandler`]((evt) => {
+      evt.preventDefault();
+      const key = `is${type}`;
+      const updateMovie = Object.assign({}, movie, {[key]: !movie[key]});
+      this._onDataChange(this, movie, updateMovie);
+    });
   }
 
   _removePopupFilm() {
