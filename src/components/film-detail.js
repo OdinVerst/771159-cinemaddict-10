@@ -42,7 +42,14 @@ const createGenreMarkup = (genres) => {
     .join(`\n`);
 };
 
-const renderUserRating = (isWatched, name, poster) => {
+const renderUserRatingValue = (value) => {
+  if (!value) {
+    return ``;
+  }
+  return `<p class="film-details__user-rating">Your rate ${value}</p>`;
+};
+
+const renderUserRatingControls = (isWatched, userRating, name, poster) => {
   if (!isWatched) {
     return ``;
   }
@@ -51,7 +58,7 @@ const renderUserRating = (isWatched, name, poster) => {
     let result = ``;
     for (let i = min; i <= max; i++) {
       result += `
-        <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}">
+        <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}" ${userRating === i ? `checked=""` : ``}>
         <label class="film-details__user-rating-label" for="rating-${i}">${i}</label>
       `;
     }
@@ -87,6 +94,7 @@ const createFilmPopupTemplate = (film) => {
     name,
     director,
     rating,
+    userRating,
     duration,
     description,
     relaese,
@@ -134,6 +142,7 @@ const createFilmPopupTemplate = (film) => {
 
               <div class="film-details__rating">
                 <p class="film-details__total-rating">${rating}</p>
+                ${renderUserRatingValue(userRating)}
               </div>
             </div>
 
@@ -163,7 +172,7 @@ const createFilmPopupTemplate = (film) => {
                 <td class="film-details__cell">${contry}</td>
               </tr>
               <tr class="film-details__row">
-                <td class="film-details__term">Genres</td>
+                <td class="film-details__term">${genre.size > 1 ? `Genres` : `Genre`}</td>
                 <td class="film-details__cell">
                   ${genreMarkup}
               </tr>
@@ -185,7 +194,7 @@ const createFilmPopupTemplate = (film) => {
         </section>
       </div>
 
-      <div class="form-details__middle-container">${renderUserRating(isWatched, name, poster)}</div>
+      <div class="form-details__middle-container">${renderUserRatingControls(isWatched, userRating, name, poster)}</div>
 
       <div class="form-details__bottom-container">
         <section class="film-details__comments-wrap">
@@ -234,6 +243,7 @@ export default class FilmDetail extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -257,5 +267,33 @@ export default class FilmDetail extends AbstractSmartComponent {
   setFavoriteButtonClickHandler(handler) {
     this.getElement().querySelector(`#favorite`)
       .addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+    const resetWatched = element.querySelector(`.film-details__watched-reset`);
+    const inputsRating = element.querySelectorAll(`.film-details__user-rating-input`);
+
+    if (resetWatched) {
+      resetWatched.addEventListener(`click`, ()=> {
+        this._film.isWatched = !this._film.isWatched;
+        this._film.userRating = false;
+        this.rerender();
+      });
+    }
+
+    if (inputsRating.length) {
+      [...inputsRating].forEach((input) => {
+        input.addEventListener(`click`, (evt)=> {
+          const valueRating = evt.currentTarget.value;
+          this._film.userRating = valueRating;
+          this.rerender();
+        });
+      });
+    }
   }
 }

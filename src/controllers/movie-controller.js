@@ -22,7 +22,6 @@ export default class MovieController {
     this._filmDetialComponent = new FilmDetail(movie);
 
     const Controls = [`Watched`, `Watchlist`, `Favorite`];
-
     Controls.forEach((control)=> {
       this._setListnersClickButton(this._filmComponent, control, movie);
       this._setListnersClickButton(this._filmDetialComponent, control, movie);

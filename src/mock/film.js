@@ -1,5 +1,5 @@
 import {getRandomArrayElement, getRandomInteger} from "../utils/common";
-import {FilmsNames, FilmsPoster, FilmsGenre, FilmsDescriptons, Directors, Actors, Ages, Contrys} from "../const";
+import {FilmsNames, FilmsPoster, FilmsGenre, FilmsDescriptons, Directors, Actors, Ages, Contrys, MIN_RATING, MAX_RATING} from "../const";
 import {generateCommenst} from "./comments";
 
 const BoolVals = [true, false];
@@ -41,6 +41,13 @@ const getRandomGenres = () => {
   });
 };
 
+const getUserRating = (wached) => {
+  if (!wached) {
+    return false;
+  }
+  return getRandomInteger(MIN_RATING, MAX_RATING);
+};
+
 const getRandomReleaseDate = () => {
   const start = new Date(1930, 0, 1);
   const end = new Date();
@@ -49,9 +56,11 @@ const getRandomReleaseDate = () => {
 };
 
 export const generateFilm = () => {
+  const isWatched = getRandomArrayElement(BoolVals);
   return {
     name: getRandomArrayElement(FilmsNames),
     rating: (getRandomInteger(10, 100) / 10).toFixed(1),
+    userRating: getUserRating(isWatched),
     age: getRandomArrayElement(Ages),
     relaese: getRandomReleaseDate(),
     duration: getRandomDuration(),
@@ -59,7 +68,7 @@ export const generateFilm = () => {
     poster: getRandomArrayElement(FilmsPoster),
     description: getRandomDescription(FilmsDescriptons),
     isFavorite: getRandomArrayElement(BoolVals),
-    isWatched: getRandomArrayElement(BoolVals),
+    isWatched,
     isWatchlist: getRandomArrayElement(BoolVals),
     comments: generateCommenst(),
     contry: getRandomArrayElement(Contrys),
