@@ -89,7 +89,7 @@ const renderUserRatingControls = (isWatched, userRating, name, poster) => {
   </section>`;
 };
 
-const createFilmPopupTemplate = (film) => {
+const createFilmPopupTemplate = (film, emoji, textComment) => {
   const {
     name,
     director,
@@ -205,10 +205,12 @@ const createFilmPopupTemplate = (film) => {
           </ul>
 
           <div class="film-details__new-comment">
-            <div for="add-emoji" class="film-details__add-emoji-label"></div>
+            <div for="add-emoji" class="film-details__add-emoji-label">
+              ${emoji ? `<img src="${emoji}" width="55" height="55" alt="emoji">` : ``}
+            </div>
 
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${textComment ? textComment : ``}</textarea>
             </label>
 
             <div class="film-details__emoji-list">
@@ -243,11 +245,13 @@ export default class FilmDetail extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
+    this._emoji = null;
+    this._textComment = null;
     this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film);
+    return createFilmPopupTemplate(this._film, this._emoji, this._textComment);
   }
 
   setFilmPopupClickHandler(handler, selector) {
@@ -273,10 +277,18 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
 
+  _addNewComment(emoji, text) {
+    this._emoji = emoji;
+    this._textComment = text;
+    this.rerender();
+  }
+
   _subscribeOnEvents() {
     const element = this.getElement();
     const resetWatched = element.querySelector(`.film-details__watched-reset`);
     const inputsRating = element.querySelectorAll(`.film-details__user-rating-input`);
+    const allEmoji = element.querySelectorAll(`.film-details__emoji-item`);
+    const textComment = element.querySelector(`.film-details__comment-input`);
 
     if (resetWatched) {
       resetWatched.addEventListener(`click`, ()=> {
@@ -286,14 +298,20 @@ export default class FilmDetail extends AbstractSmartComponent {
       });
     }
 
-    if (inputsRating.length) {
-      [...inputsRating].forEach((input) => {
-        input.addEventListener(`click`, (evt)=> {
-          const valueRating = evt.currentTarget.value;
-          this._film.userRating = valueRating;
-          this.rerender();
-        });
+    [...inputsRating].forEach((input) => {
+      input.addEventListener(`click`, (evt)=> {
+        const valueRating = evt.currentTarget.value;
+        this._film.userRating = valueRating;
+        this.rerender();
       });
-    }
+    });
+
+    [...allEmoji].forEach((emoji) => {
+      emoji.addEventListener(`click`, (evt)=> {
+        const valueEmojiID = evt.currentTarget.getAttribute(`id`);
+        const emojiURL = element.querySelector(`label[for="${valueEmojiID}"] img`).getAttribute(`src`);
+        this._addNewComment(emojiURL, textComment.value);
+      });
+    });
   }
 }
