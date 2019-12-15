@@ -1,6 +1,6 @@
 import {normalizeSingleDigit} from "../utils/common";
-import {MonthNames} from "../const";
-import AbstractComponent from "./abstract-component";
+import {MonthNames, MIN_RATING, MAX_RATING} from "../const";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const createCommentsMarkup = (comments) => {
   return comments
@@ -40,6 +40,46 @@ const createGenreMarkup = (genres) => {
       return `<span class="film-details__genre">${genre}</span>`;
     })
     .join(`\n`);
+};
+
+const renderUserRating = (isWatched, name, poster) => {
+  if (!isWatched) {
+    return ``;
+  }
+
+  const renderRtingInput = (min, max) => {
+    let result = ``;
+    for (let i = min; i <= max; i++) {
+      result += `
+        <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}">
+        <label class="film-details__user-rating-label" for="rating-${i}">${i}</label>
+      `;
+    }
+    return result;
+  };
+
+  return `
+  <section class="film-details__user-rating-wrap">
+    <div class="film-details__user-rating-controls">
+      <button class="film-details__watched-reset" type="button">Undo</button>
+    </div>
+
+    <div class="film-details__user-score">
+      <div class="film-details__user-rating-poster">
+        <img src="./${poster}" alt="film-poster" class="film-details__user-rating-img">
+      </div>
+
+      <section class="film-details__user-rating-inner">
+        <h3 class="film-details__user-rating-title">${name}</h3>
+
+        <p class="film-details__user-rating-feelings">How you feel it?</p>
+
+        <div class="film-details__user-rating-score">
+          ${renderRtingInput(MIN_RATING, MAX_RATING)}
+        </div>
+      </section>
+    </div>
+  </section>`;
 };
 
 const createFilmPopupTemplate = (film) => {
@@ -145,6 +185,8 @@ const createFilmPopupTemplate = (film) => {
         </section>
       </div>
 
+      <div class="form-details__middle-container">${renderUserRating(isWatched, name, poster)}</div>
+
       <div class="form-details__bottom-container">
         <section class="film-details__comments-wrap">
           <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
@@ -188,7 +230,7 @@ const createFilmPopupTemplate = (film) => {
   </section>`;
 };
 
-export default class FilmDetail extends AbstractComponent {
+export default class FilmDetail extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
