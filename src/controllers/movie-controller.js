@@ -2,13 +2,16 @@ import FilmCard from "../components/film-card";
 import FilmDetail from "../components/film-detail";
 import {remove, render, replace} from "../utils/render";
 
+
 export default class MovieController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
 
     this._filmComponent = null;
     this._filmDetialComponent = null;
+    this._filmDetialOpen = false;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._removePopupFilm = this._removePopupFilm.bind(this);
@@ -50,8 +53,10 @@ export default class MovieController {
   _setListnersOpenDetail(selector, container, closeButton) {
     this._filmComponent.setFilmClickHandler(() => {
       render(container, this._filmDetialComponent);
+      this._onViewChange();
       this._filmDetialComponent.setFilmPopupClickHandler(this._removePopupFilm, closeButton);
       document.addEventListener(`keydown`, this._onEscKeyDown);
+      this._filmDetialOpen = true;
     }, selector);
   }
 
@@ -65,7 +70,14 @@ export default class MovieController {
   }
 
   _removePopupFilm() {
+    this._filmDetialOpen = false;
     remove(this._filmDetialComponent);
+  }
+
+  setDefaultView() {
+    if (this._filmDetialOpen) {
+      this._removePopupFilm();
+    }
   }
 
   _onEscKeyDown(evt) {
