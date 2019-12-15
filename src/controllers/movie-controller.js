@@ -16,7 +16,7 @@ export default class MovieController {
 
   render(movie) {
     const oldFilmComponent = this._filmComponent;
-    const oldfilmDetialComponent = this._filmDetialComponent;
+    const oldFilmDetialComponent = this._filmDetialComponent;
 
     this._filmComponent = new FilmCard(movie);
     this._filmDetialComponent = new FilmPopup(movie);
@@ -51,9 +51,9 @@ export default class MovieController {
       this._setListners(element, popupContainer, closeButton);
     });
 
-    if (oldfilmDetialComponent && oldFilmComponent) {
+    if (oldFilmDetialComponent && oldFilmComponent) {
       replace(this._filmComponent, oldFilmComponent);
-      replace(this._filmDetialComponent, oldfilmDetialComponent);
+      replace(this._filmDetialComponent, oldFilmDetialComponent);
     } else {
       render(this._container, this._filmComponent);
     }
