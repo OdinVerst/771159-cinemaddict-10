@@ -10,58 +10,48 @@ export default class MovieController {
     this._onViewChange = onViewChange;
 
     this._filmComponent = null;
-    this._filmDetialComponent = null;
+    this._filmDetailComponent = null;
     this._filmDetialOpen = false;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    this._removePopupFilm = this._removePopupFilm.bind(this);
+    this._removeFilmDetail = this._removeFilmDetail.bind(this);
   }
 
   render(movie) {
     const oldFilmComponent = this._filmComponent;
-    const oldFilmDetialComponent = this._filmDetialComponent;
+    const oldFilmDetailComponent = this._filmDetailComponent;
 
     this._filmComponent = new FilmCard(movie);
-    this._filmDetialComponent = new FilmDetail(movie);
+    this._filmDetailComponent = new FilmDetail(movie);
 
     const Controls = [`Watched`, `Watchlist`, `Favorite`];
     Controls.forEach((control)=> {
-      this._setListnersClickButton(this._filmComponent, control, movie);
-      this._setListnersClickButton(this._filmDetialComponent, control, movie);
+      this._filmCardControlHandler(control, movie);
+      this._filmDetailControlHandler(control, movie);
     });
 
-    const filmElements = {
-      poster: `.film-card__poster`,
-      titleFilm: `.film-card__title`,
-      commentsFilm: `.film-card__comments`
-    };
-    const popupContainer = document.querySelector(`body`);
-    const closeButton = `.film-details__close-btn`;
+    this._filmCardClickHandler();
 
-    Object.values(filmElements).forEach((element)=> {
-      this._setListnersOpenDetail(element, popupContainer, closeButton);
-    });
-
-    if (oldFilmDetialComponent && oldFilmComponent) {
+    if (oldFilmDetailComponent && oldFilmComponent) {
       replace(this._filmComponent, oldFilmComponent);
-      replace(this._filmDetialComponent, oldFilmDetialComponent);
+      replace(this._filmDetailComponent, oldFilmDetailComponent);
     } else {
       render(this._container, this._filmComponent);
     }
   }
 
-  _setListnersOpenDetail(selector, container, closeButton) {
-    this._filmComponent.setFilmClickHandler(() => {
-      render(container, this._filmDetialComponent);
+  _filmCardClickHandler() {
+    this._filmComponent.setShowDetailsHandler(() => {
+      render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
       this._onViewChange();
-      this._filmDetialComponent.setFilmPopupClickHandler(this._removePopupFilm, closeButton);
+      this._filmDetailComponent.setCloseHandler(this._removeFilmDetail);
       document.addEventListener(`keydown`, this._onEscKeyDown);
       this._filmDetialOpen = true;
-    }, selector);
+    });
   }
 
-  _setListnersClickButton(component, type, movie) {
-    component[`set${type}ButtonClickHandler`]((evt) => {
+  _filmCardControlHandler(type, movie) {
+    this._filmComponent[`set${type}ButtonClickHandler`]((evt) => {
       evt.preventDefault();
       const key = `is${type}`;
       const updateMovie = Object.assign({}, movie, {[key]: !movie[key]});
@@ -69,14 +59,23 @@ export default class MovieController {
     });
   }
 
-  _removePopupFilm() {
+  _filmDetailControlHandler(type, movie) {
+    this._filmDetailComponent[`set${type}ButtonClickHandler`]((evt) => {
+      evt.preventDefault();
+      const key = `is${type}`;
+      const updateMovie = Object.assign({}, movie, {[key]: !movie[key]});
+      this._onDataChange(this, movie, updateMovie);
+    });
+  }
+
+  _removeFilmDetail() {
     this._filmDetialOpen = false;
-    remove(this._filmDetialComponent);
+    remove(this._filmDetailComponent);
   }
 
   setDefaultView() {
     if (this._filmDetialOpen) {
-      this._removePopupFilm();
+      this._removeFilmDetail();
     }
   }
 
@@ -84,7 +83,7 @@ export default class MovieController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      this._removePopupFilm();
+      this._removeFilmDetail();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }

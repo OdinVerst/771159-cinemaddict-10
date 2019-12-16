@@ -58,7 +58,7 @@ const renderUserRatingControls = (isWatched, userRating, name, poster) => {
     let result = ``;
     for (let i = min; i <= max; i++) {
       result += `
-        <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}" ${userRating === i ? `checked=""` : ``}>
+        <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${i}" id="rating-${i}" ${Number(userRating) === i ? `checked=""` : ``}>
         <label class="film-details__user-rating-label" for="rating-${i}">${i}</label>
       `;
     }
@@ -247,6 +247,15 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._film = film;
     this._emoji = null;
     this._textComment = null;
+
+    this._addToWatchListHandler = null;
+    this._addToWatchedHandler = null;
+    this._addToFavoritesHandler = null;
+    this._closeHandler = null;
+    this._userRatingChangeHandler = null;
+    this._animate = true;
+
+    this._container = document.querySelector(`body`);
     this._subscribeOnEvents();
   }
 
@@ -254,26 +263,65 @@ export default class FilmDetail extends AbstractSmartComponent {
     return createFilmPopupTemplate(this._film, this._emoji, this._textComment);
   }
 
-  setFilmPopupClickHandler(handler, selector) {
-    this.getElement().querySelector(selector).addEventListener(`click`, handler);
+  getContainer() {
+    return this._container;
+  }
+
+  disebledAnimate() {
+    this._animate = false;
+  }
+
+  setCloseHandler(handler) {
+    this._closeHandler = handler;
+    this._recoverSetCloseHandler();
   }
 
   setWatchlistButtonClickHandler(handler) {
-    this.getElement().querySelector(`#watchlist`)
-      .addEventListener(`click`, handler);
+    this._addToWatchListHandler = handler;
+    this._recoverWatchlistHandler();
   }
 
   setWatchedButtonClickHandler(handler) {
-    this.getElement().querySelector(`#watched`)
-      .addEventListener(`click`, handler);
+    this._addToWatchedHandler = handler;
+    this._recoverWatchedHandler();
   }
 
   setFavoriteButtonClickHandler(handler) {
-    this.getElement().querySelector(`#favorite`)
-      .addEventListener(`click`, handler);
+    this._addToFavoritesHandler = handler;
+    this._recoverFavoriteClickHandler();
+  }
+
+  _recoverDisebledAnimate() {
+    if (!this._animate) {
+      this.getElement().getAttribute(`style`, `animation: none;`);
+    } else {
+      this.getElement().removeAttribute(`style`);
+    }
+  }
+
+  _recoverSetCloseHandler() {
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeHandler);
+  }
+
+  _recoverWatchlistHandler() {
+    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._addToWatchListHandler);
+  }
+
+  _recoverWatchedHandler() {
+    this.getElement().querySelector(`#watched`).addEventListener(`click`, this._addToWatchedHandler);
+  }
+
+  _recoverFavoriteClickHandler() {
+    this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._addToFavoritesHandler);
   }
 
   recoveryListeners() {
+    this._recoverSetCloseHandler();
+    this._recoverWatchlistHandler();
+    this._recoverWatchedHandler();
+    this._recoverFavoriteClickHandler();
+    this._recoverDisebledAnimate();
+
     this._subscribeOnEvents();
   }
 

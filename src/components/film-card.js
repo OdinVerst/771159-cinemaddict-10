@@ -1,4 +1,4 @@
-import AbstractSmartComponent from "./abstract-smart-component";
+import AbstractComponent from "./abstract-component";
 
 const isActive = (prop) => {
   return prop ? `film-card__controls-item--active` : ``;
@@ -36,7 +36,7 @@ const createFilmCardTemplate = (film) => {
   </article>`;
 };
 
-export default class FilmCard extends AbstractSmartComponent {
+export default class FilmCard extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
@@ -46,12 +46,10 @@ export default class FilmCard extends AbstractSmartComponent {
     return createFilmCardTemplate(this._film);
   }
 
-  recoveryListeners() {
-    return false;
-  }
-
-  setFilmClickHandler(handler, selector) {
-    this.getElement().querySelector(selector).addEventListener(`click`, handler);
+  setShowDetailsHandler(handler) {
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, handler);
   }
 
   setWatchlistButtonClickHandler(handler) {
