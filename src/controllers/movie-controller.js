@@ -24,13 +24,12 @@ export default class MovieController {
 
     this._filmComponent = new FilmCard(movie);
     this._filmDetailComponent = new FilmDetail(movie);
-    // Не уверен в правильности и именовнии
-    this._filmDetail = this._filmDetailHandlers(this._filmDetailComponent, movie);
+    this._filmDetail = this._setFilmDetailAllHandlers(this._filmDetailComponent, movie);
 
     Controls.forEach((control)=> {
-      this._filmCardControlHandler(control, movie);
+      this._setFilmCardControlHandler(control, movie);
     });
-    this._filmCardClickHandler();
+    this._setFilmCardClickHandler();
 
     if (oldFilmDetailComponent && oldFilmComponent) {
       replace(this._filmComponent, oldFilmComponent);
@@ -41,7 +40,7 @@ export default class MovieController {
     }
   }
 
-  _filmCardClickHandler() {
+  _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
       render(this._filmDetailComponent.getContainer(), this._filmDetail);
       this._onViewChange();
@@ -49,7 +48,7 @@ export default class MovieController {
     });
   }
 
-  _filmCardControlHandler(type, movie) {
+  _setFilmCardControlHandler(type, movie) {
     this._filmComponent[`set${type}ButtonClickHandler`]((evt) => {
       evt.preventDefault();
       const key = `is${type}`;
@@ -58,16 +57,16 @@ export default class MovieController {
     });
   }
 
-  _filmDetailHandlers(component, movie) {
+  _setFilmDetailAllHandlers(component, movie) {
     Controls.forEach((control)=> {
-      this._filmDetailControlHandler(control, movie);
+      this._setFilmDetailControlHandler(control, movie);
     });
-    this._filmDetailCloseHandler();
+    this._setFilmDetailCloseHandler();
 
     return component;
   }
 
-  _filmDetailControlHandler(type, movie) {
+  _setFilmDetailControlHandler(type, movie) {
     this._filmDetailComponent[`set${type}ButtonClickHandler`]((evt) => {
       evt.preventDefault();
       const key = `is${type}`;
@@ -76,7 +75,7 @@ export default class MovieController {
     });
   }
 
-  _filmDetailCloseHandler() {
+  _setFilmDetailCloseHandler() {
     this._filmDetailComponent.setCloseHandler(this._removeFilmDetail);
     document.addEventListener(`keydown`, this._onEscKeyDown);
   }

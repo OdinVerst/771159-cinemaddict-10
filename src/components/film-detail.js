@@ -49,7 +49,7 @@ const renderUserRatingValue = (value) => {
   return `<p class="film-details__user-rating">Your rate ${value}</p>`;
 };
 
-const renderUserRatingControls = (isWatched, userRating, name, poster) => {
+const renderUserRatingInputs = (isWatched, userRating, name, poster) => {
   if (!isWatched) {
     return ``;
   }
@@ -194,7 +194,7 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
         </section>
       </div>
 
-      <div class="form-details__middle-container">${renderUserRatingControls(isWatched, userRating, name, poster)}</div>
+      <div class="form-details__middle-container">${renderUserRatingInputs(isWatched, userRating, name, poster)}</div>
 
       <div class="form-details__bottom-container">
         <section class="film-details__comments-wrap">
