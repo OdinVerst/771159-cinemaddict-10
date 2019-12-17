@@ -29,11 +29,12 @@ export default class MovieController {
       this._filmCardControlHandler(control, movie);
       this._filmDetailControlHandler(control, movie);
     });
-
     this._filmCardClickHandler();
+    this._filmDetailCloseHandler();
 
     if (oldFilmDetailComponent && oldFilmComponent) {
       replace(this._filmComponent, oldFilmComponent);
+      this._filmDetailComponent.disebledAnimate();
       replace(this._filmDetailComponent, oldFilmDetailComponent);
     } else {
       render(this._container, this._filmComponent);
@@ -44,10 +45,13 @@ export default class MovieController {
     this._filmComponent.setShowDetailsHandler(() => {
       render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
       this._onViewChange();
-      this._filmDetailComponent.setCloseHandler(this._removeFilmDetail);
-      document.addEventListener(`keydown`, this._onEscKeyDown);
       this._filmDetialOpen = true;
     });
+  }
+
+  _filmDetailCloseHandler() {
+    this._filmDetailComponent.setCloseHandler(this._removeFilmDetail);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _filmCardControlHandler(type, movie) {

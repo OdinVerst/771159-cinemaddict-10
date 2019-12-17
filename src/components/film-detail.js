@@ -260,7 +260,7 @@ export default class FilmDetail extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film, this._emoji, this._textComment);
+    return createFilmPopupTemplate(this._film, this._emoji, this._textComment, this._animate);
   }
 
   getContainer() {
@@ -269,6 +269,7 @@ export default class FilmDetail extends AbstractSmartComponent {
 
   disebledAnimate() {
     this._animate = false;
+    this._recoverDisebledAnimate();
   }
 
   setCloseHandler(handler) {
@@ -293,7 +294,7 @@ export default class FilmDetail extends AbstractSmartComponent {
 
   _recoverDisebledAnimate() {
     if (!this._animate) {
-      this.getElement().getAttribute(`style`, `animation: none;`);
+      this.getElement().setAttribute(`style`, `animation: none;`);
     } else {
       this.getElement().removeAttribute(`style`);
     }
