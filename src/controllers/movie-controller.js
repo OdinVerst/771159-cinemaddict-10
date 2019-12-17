@@ -25,7 +25,7 @@ export default class MovieController {
     this._filmComponent = new FilmCard(movie);
     this._filmDetailComponent = new FilmDetail(movie);
     // Не уверен в правильности и именовнии
-    this._filmDetail = this._filmDeatialHandlers(this._filmDetailComponent, movie);
+    this._filmDetail = this._filmDeatailHandlers(this._filmDetailComponent, movie);
 
     Controls.forEach((control)=> {
       this._filmCardControlHandler(control, movie);
@@ -58,7 +58,7 @@ export default class MovieController {
     });
   }
 
-  _filmDeatialHandlers(component, movie) {
+  _filmDetailHandlers(component, movie) {
     Controls.forEach((control)=> {
       this._filmDetailControlHandler(control, movie);
     });
