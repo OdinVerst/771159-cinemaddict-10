@@ -322,7 +322,6 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._recoverWatchedHandler();
     this._recoverFavoriteClickHandler();
     this._recoverDisebledAnimate();
-    this._recoverDisebledAnimate();
 
     this._subscribeOnEvents();
   }

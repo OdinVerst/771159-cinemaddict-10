@@ -24,6 +24,7 @@ export default class MovieController {
 
     this._filmComponent = new FilmCard(movie);
     this._filmDetailComponent = new FilmDetail(movie);
+
     this._filmDetail = this._setFilmDetailAllHandlers(this._filmDetailComponent, movie);
 
     Controls.forEach((control)=> {
@@ -83,6 +84,7 @@ export default class MovieController {
   _removeFilmDetail() {
     this._filmDetialOpen = false;
     remove(this._filmDetailComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   setDefaultView() {
@@ -96,7 +98,6 @@ export default class MovieController {
 
     if (isEscKey) {
       this._removeFilmDetail();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
 }

@@ -113,10 +113,10 @@ export default class PageController {
       balanseFilms -= SHOWING_FILMS_COUNT_ON_ITERATION;
       if (balanseFilms) {
         if (balanseFilms - SHOWING_FILMS_COUNT_ON_ITERATION >= 1) {
-          const newFilms = this._renderFilms(this._filmsContainerComponent.getElement(), this._films, this._onDataChange, SHOWING_FILMS_COUNT_ON_ITERATION);
+          const newFilms = this._renderFilms(this._films, SHOWING_FILMS_COUNT_ON_ITERATION);
           this._showedMovieControllers = this._showedMovieControllers.concat(newFilms);
         } else {
-          const newFilms = this._renderFilms(this._filmsContainerComponent.getElement(), this._films, this._onDataChange, balanseFilms);
+          const newFilms = this._renderFilms(this._films, balanseFilms);
           this._showedMovieControllers = this._showedMovieControllers.concat(newFilms);
           remove(btnMore);
         }
