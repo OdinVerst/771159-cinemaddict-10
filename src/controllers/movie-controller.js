@@ -10,6 +10,7 @@ export default class MovieController {
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
 
+    this._film = null;
     this._filmComponent = null;
     this._filmDetailComponent = null;
     this._filmDetialOpen = false;
@@ -19,16 +20,17 @@ export default class MovieController {
   }
 
   render(movie) {
+    this._film = movie;
     const oldFilmComponent = this._filmComponent;
     const oldFilmDetailComponent = this._filmDetailComponent;
 
-    this._filmComponent = new FilmCard(movie);
-    this._filmDetailComponent = new FilmDetail(movie);
+    this._filmComponent = new FilmCard(this._film);
+    this._filmDetailComponent = new FilmDetail(this._film);
 
-    this._filmDetail = this._setFilmDetailAllHandlers(this._filmDetailComponent, movie);
+    this._filmDetail = this._setFilmDetailAllHandlers(this._filmDetailComponent);
 
     Controls.forEach((control)=> {
-      this._setFilmCardControlHandler(control, movie);
+      this._setFilmCardControlHandler(control);
     });
     this._setFilmCardClickHandler();
 
@@ -43,36 +45,37 @@ export default class MovieController {
 
   _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
+      this._filmDetail = this._setFilmDetailAllHandlers(this._filmDetailComponent);
       render(this._filmDetailComponent.getContainer(), this._filmDetail);
       this._onViewChange();
       this._filmDetialOpen = true;
     });
   }
 
-  _setFilmCardControlHandler(type, movie) {
+  _setFilmCardControlHandler(type) {
     this._filmComponent[`set${type}ButtonClickHandler`]((evt) => {
       evt.preventDefault();
       const key = `is${type}`;
-      const updateMovie = Object.assign({}, movie, {[key]: !movie[key]});
-      this._onDataChange(this, movie, updateMovie);
+      const updateFilm = Object.assign({}, this._film, {[key]: !this._film[key]});
+      this._onDataChange(this, this._film, updateFilm);
     });
   }
 
-  _setFilmDetailAllHandlers(component, movie) {
+  _setFilmDetailAllHandlers(component) {
     Controls.forEach((control)=> {
-      this._setFilmDetailControlHandler(control, movie);
+      this._setFilmDetailControlHandler(control);
     });
     this._setFilmDetailCloseHandler();
 
     return component;
   }
 
-  _setFilmDetailControlHandler(type, movie) {
+  _setFilmDetailControlHandler(type) {
     this._filmDetailComponent[`set${type}ButtonClickHandler`]((evt) => {
       evt.preventDefault();
       const key = `is${type}`;
-      const updateMovie = Object.assign({}, movie, {[key]: !movie[key]});
-      this._onDataChange(this, movie, updateMovie);
+      const updateFilm = Object.assign({}, this._film, {[key]: !this._film[key]});
+      this._onDataChange(this, this._film, updateFilm);
     });
   }
 
