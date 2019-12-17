@@ -2,6 +2,7 @@ import FilmCard from "../components/film-card";
 import FilmDetail from "../components/film-detail";
 import {remove, render, replace} from "../utils/render";
 
+const Controls = [`Watched`, `Watchlist`, `Favorite`];
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange) {
@@ -23,14 +24,13 @@ export default class MovieController {
 
     this._filmComponent = new FilmCard(movie);
     this._filmDetailComponent = new FilmDetail(movie);
+    // Не уверен в правильности и именовнии
+    this._filmDetail = this._filmDeatialHandlers(this._filmDetailComponent, movie);
 
-    const Controls = [`Watched`, `Watchlist`, `Favorite`];
     Controls.forEach((control)=> {
       this._filmCardControlHandler(control, movie);
-      this._filmDetailControlHandler(control, movie);
     });
     this._filmCardClickHandler();
-    this._filmDetailCloseHandler();
 
     if (oldFilmDetailComponent && oldFilmComponent) {
       replace(this._filmComponent, oldFilmComponent);
@@ -43,15 +43,10 @@ export default class MovieController {
 
   _filmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
-      render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
+      render(this._filmDetailComponent.getContainer(), this._filmDetail);
       this._onViewChange();
       this._filmDetialOpen = true;
     });
-  }
-
-  _filmDetailCloseHandler() {
-    this._filmDetailComponent.setCloseHandler(this._removeFilmDetail);
-    document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _filmCardControlHandler(type, movie) {
@@ -63,6 +58,15 @@ export default class MovieController {
     });
   }
 
+  _filmDeatialHandlers(component, movie) {
+    Controls.forEach((control)=> {
+      this._filmDetailControlHandler(control, movie);
+    });
+    this._filmDetailCloseHandler();
+
+    return component;
+  }
+
   _filmDetailControlHandler(type, movie) {
     this._filmDetailComponent[`set${type}ButtonClickHandler`]((evt) => {
       evt.preventDefault();
@@ -70,6 +74,11 @@ export default class MovieController {
       const updateMovie = Object.assign({}, movie, {[key]: !movie[key]});
       this._onDataChange(this, movie, updateMovie);
     });
+  }
+
+  _filmDetailCloseHandler() {
+    this._filmDetailComponent.setCloseHandler(this._removeFilmDetail);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _removeFilmDetail() {

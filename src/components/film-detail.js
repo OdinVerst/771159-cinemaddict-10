@@ -322,6 +322,7 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._recoverWatchedHandler();
     this._recoverFavoriteClickHandler();
     this._recoverDisebledAnimate();
+    this._recoverDisebledAnimate();
 
     this._subscribeOnEvents();
   }
@@ -343,6 +344,7 @@ export default class FilmDetail extends AbstractSmartComponent {
       resetWatched.addEventListener(`click`, ()=> {
         this._film.isWatched = !this._film.isWatched;
         this._film.userRating = false;
+        this._animate = false;
         this.rerender();
       });
     }
@@ -351,6 +353,7 @@ export default class FilmDetail extends AbstractSmartComponent {
       input.addEventListener(`click`, (evt)=> {
         const valueRating = evt.currentTarget.value;
         this._film.userRating = valueRating;
+        this._animate = false;
         this.rerender();
       });
     });
@@ -359,6 +362,7 @@ export default class FilmDetail extends AbstractSmartComponent {
       emoji.addEventListener(`click`, (evt)=> {
         const valueEmojiID = evt.currentTarget.getAttribute(`id`);
         const emojiURL = element.querySelector(`label[for="${valueEmojiID}"] img`).getAttribute(`src`);
+        this._animate = false;
         this._addNewComment(emojiURL, textComment.value);
       });
     });
