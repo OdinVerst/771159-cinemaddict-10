@@ -248,6 +248,11 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._emoji = null;
     this._textComment = null;
 
+    this._closeHandler = null;
+    this._watchlistHandler = null;
+    this._watchedHandler = null;
+    this._favoriteHandler = null;
+
     this._animate = true;
 
     this._container = document.querySelector(`body`);
@@ -282,19 +287,22 @@ export default class FilmDetail extends AbstractSmartComponent {
 
   setCloseHandler(handler) {
     this._closeHandler = handler;
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeHandler);
   }
 
   setWatchlistButtonClickHandler(handler) {
-    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, handler);
+    this._watchlistHandler = handler;
+    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistHandler);
   }
 
   setWatchedButtonClickHandler(handler) {
-    this.getElement().querySelector(`#watched`).addEventListener(`click`, handler);
+    this._watchedHandler = handler;
+    this.getElement().querySelector(`#watched`).addEventListener(`click`, this._watchedHandler);
   }
 
   setFavoriteButtonClickHandler(handler) {
-    this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
+    this._favoriteHandler = handler;
+    this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._favoriteHandler);
   }
 
   _recoverDisebledAnimate() {
@@ -307,6 +315,10 @@ export default class FilmDetail extends AbstractSmartComponent {
 
   recoveryListeners() {
     this._recoverDisebledAnimate();
+    this.setCloseHandler(this._closeHandler);
+    this.setWatchlistButtonClickHandler(this._watchlistHandler);
+    this.setWatchedButtonClickHandler(this._watchedHandler);
+    this.setFavoriteButtonClickHandler(this._favoriteHandler);
 
     this._subscribeOnEvents();
   }

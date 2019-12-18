@@ -15,7 +15,7 @@ export default class MovieController {
     this._filmDetailComponent = null;
     this._filmDetialOpen = false;
 
-    this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._onEscKeyDown = this._checkEscKeyDown.bind(this);
     this._removeFilmDetail = this._removeFilmDetail.bind(this);
   }
 
@@ -26,8 +26,7 @@ export default class MovieController {
 
     this._filmComponent = new FilmCard(this._film);
     this._filmDetailComponent = new FilmDetail(this._film);
-
-    this._filmDetail = this._setFilmDetailAllHandlers(this._filmDetailComponent);
+    this._filmDetail = this._filmDetailAllHandlers(this._filmDetailComponent);
 
     Controls.forEach((control)=> {
       this._setFilmCardControlHandler(control);
@@ -45,7 +44,7 @@ export default class MovieController {
 
   _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
-      this._filmDetail = this._setFilmDetailAllHandlers(this._filmDetailComponent);
+      this._filmDetailComponent.rerender();
       render(this._filmDetailComponent.getContainer(), this._filmDetail);
       this._onViewChange();
       this._filmDetialOpen = true;
@@ -61,33 +60,30 @@ export default class MovieController {
     });
   }
 
-  _setFilmDetailAllHandlers(component) {
-    Controls.forEach((control)=> {
-      this._setFilmDetailControlHandler(control);
+  _filmDetailAllHandlers(component) {
+    component.setWatchedButtonClickHandler(() => {
+      const updateFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched});
+      this._onDataChange(this, this._film, updateFilm);
+      component.rerender();
     });
-    this._setFilmDetailCloseHandler();
-
-    return component;
-  }
-
-  _setFilmDetailControlHandler(type) {
-    this._filmDetailComponent[`set${type}ButtonClickHandler`]((evt) => {
-      evt.preventDefault();
-      const key = `is${type}`;
-      const updateFilm = Object.assign({}, this._film, {[key]: !this._film[key]});
+    component.setWatchlistButtonClickHandler(() => {
+      const updateFilm = Object.assign({}, this._film, {isWatchlist: !this._film.isWatchlist});
       this._onDataChange(this, this._film, updateFilm);
     });
-  }
+    component.setFavoriteButtonClickHandler(() => {
+      const updateFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
+      this._onDataChange(this, this._film, updateFilm);
+    });
+    component.setCloseHandler(this._removeFilmDetail);
+    document.addEventListener(`keydown`, this._checkEscKeyDown);
 
-  _setFilmDetailCloseHandler() {
-    this._filmDetailComponent.setCloseHandler(this._removeFilmDetail);
-    document.addEventListener(`keydown`, this._onEscKeyDown);
+    return component;
   }
 
   _removeFilmDetail() {
     this._filmDetialOpen = false;
     remove(this._filmDetailComponent);
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._checkEscKeyDown);
   }
 
   setDefaultView() {
@@ -96,7 +92,7 @@ export default class MovieController {
     }
   }
 
-  _onEscKeyDown(evt) {
+  _checkEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
