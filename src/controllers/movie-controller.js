@@ -14,8 +14,9 @@ export default class MovieController {
     this._filmComponent = null;
     this._filmDetailComponent = null;
     this._filmDetialOpen = false;
+    this._existFilmDetailHandler = false;
 
-    this._onEscKeyDown = this._checkEscKeyDown.bind(this);
+    this._checkEscKeyDown = this._checkEscKeyDown.bind(this);
     this._removeFilmDetail = this._removeFilmDetail.bind(this);
   }
 
@@ -26,7 +27,7 @@ export default class MovieController {
 
     this._filmComponent = new FilmCard(this._film);
     this._filmDetailComponent = new FilmDetail(this._film);
-    this._filmDetail = this._filmDetailAllHandlers(this._filmDetailComponent);
+    this._filmDetailAllHandlers(this._filmDetailComponent);
 
     Controls.forEach((control)=> {
       this._setFilmCardControlHandler(control);
@@ -44,8 +45,10 @@ export default class MovieController {
 
   _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
-      this._filmDetailComponent.rerender();
-      render(this._filmDetailComponent.getContainer(), this._filmDetail);
+      if (!this._existFilmDetailHandler) {
+        this._filmDetailAllHandlers(this._filmDetailComponent);
+      }
+      render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
       this._onViewChange();
       this._filmDetialOpen = true;
     });
@@ -61,6 +64,7 @@ export default class MovieController {
   }
 
   _filmDetailAllHandlers(component) {
+    this._existFilmDetailHandler = true;
     component.setWatchedButtonClickHandler(() => {
       const updateFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched});
       this._onDataChange(this, this._film, updateFilm);
@@ -76,11 +80,10 @@ export default class MovieController {
     });
     component.setCloseHandler(this._removeFilmDetail);
     document.addEventListener(`keydown`, this._checkEscKeyDown);
-
-    return component;
   }
 
   _removeFilmDetail() {
+    this._existFilmDetailHandler = false;
     this._filmDetialOpen = false;
     remove(this._filmDetailComponent);
     document.removeEventListener(`keydown`, this._checkEscKeyDown);
