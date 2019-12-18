@@ -141,7 +141,8 @@ export default class PageController {
     this._filmsContainerComponent.getElement().innerHTML = ``;
     filmsOnList = SHOWING_FILMS_COUNT_ON_ITERATION;
 
-    this._renderFilms(this._filmsContainerComponent.getElement(), sortedFilms);
+    console.log(sortedFilms);
+    this._renderFilms(sortedFilms);
     if (sortType === SortType.DEFAULT) {
       const filmsListElement = this._container.querySelector(`.films-list`);
       this._renderLoadMoreButton(filmsListElement);
