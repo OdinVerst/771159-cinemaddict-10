@@ -26,8 +26,6 @@ export default class MovieController {
     const oldFilmDetailComponent = this._filmDetailComponent;
 
     this._filmComponent = new FilmCard(this._film);
-    this._filmDetailComponent = new FilmDetail(this._film);
-    this._filmDetailAllHandlers(this._filmDetailComponent);
 
     Controls.forEach((control)=> {
       this._setFilmCardControlHandler(control);
@@ -36,8 +34,7 @@ export default class MovieController {
 
     if (oldFilmDetailComponent && oldFilmComponent) {
       replace(this._filmComponent, oldFilmComponent);
-      this._filmDetailComponent.disebledAnimate();
-      replace(this._filmDetailComponent, oldFilmDetailComponent);
+      oldFilmDetailComponent.updateFilm(movie);
     } else {
       render(this._container, this._filmComponent);
     }
@@ -45,9 +42,8 @@ export default class MovieController {
 
   _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
-      if (!this._existFilmDetailHandler) {
-        this._filmDetailAllHandlers(this._filmDetailComponent);
-      }
+      this._filmDetailComponent = new FilmDetail(this._film);
+      this._filmDetailAllHandlers(this._filmDetailComponent);
       render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
       this._onViewChange();
       this._filmDetialOpen = true;

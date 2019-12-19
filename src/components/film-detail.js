@@ -248,19 +248,17 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._emoji = null;
     this._textComment = null;
 
-    this._closeHandler = null;
-    this._watchlistHandler = null;
-    this._watchedHandler = null;
-    this._favoriteHandler = null;
-
-    this._animate = true;
+    this._closeButtonClickHandler = null;
+    this._watchlistButtonClickHandler = null;
+    this._watchedButtonClickHandler = null;
+    this._favoriteButtonClickHandler = null;
 
     this._container = document.querySelector(`body`);
     this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film, this._emoji, this._textComment, this._animate);
+    return createFilmPopupTemplate(this._film, this._emoji, this._textComment);
   }
 
   getContainer() {
@@ -269,6 +267,10 @@ export default class FilmDetail extends AbstractSmartComponent {
 
   setElement(element) {
     this._element = element;
+  }
+
+  updateFilm(film) {
+    this._film = film;
   }
 
   rerender() {
@@ -280,45 +282,31 @@ export default class FilmDetail extends AbstractSmartComponent {
     this.recoveryListeners();
   }
 
-  disebledAnimate() {
-    this._animate = false;
-    this._recoverDisebledAnimate();
-  }
-
   setCloseHandler(handler) {
-    this._closeHandler = handler;
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeHandler);
+    this._closeButtonClickHandler = handler;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeButtonClickHandler);
   }
 
   setWatchlistButtonClickHandler(handler) {
-    this._watchlistHandler = handler;
-    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistHandler);
+    this._watchlistButtonClickHandler = handler;
+    this.getElement().querySelector(`#watchlist`).addEventListener(`click`, this._watchlistButtonClickHandler);
   }
 
   setWatchedButtonClickHandler(handler) {
-    this._watchedHandler = handler;
-    this.getElement().querySelector(`#watched`).addEventListener(`click`, this._watchedHandler);
+    this._watchedButtonClickHandler = handler;
+    this.getElement().querySelector(`#watched`).addEventListener(`click`, this._watchedButtonClickHandler);
   }
 
   setFavoriteButtonClickHandler(handler) {
-    this._favoriteHandler = handler;
-    this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._favoriteHandler);
-  }
-
-  _recoverDisebledAnimate() {
-    if (!this._animate) {
-      this.getElement().setAttribute(`style`, `animation: none;`);
-    } else {
-      this.getElement().removeAttribute(`style`);
-    }
+    this._favoriteButtonClickHandler = handler;
+    this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._favoriteButtonClickHandler);
   }
 
   recoveryListeners() {
-    this._recoverDisebledAnimate();
-    this.setCloseHandler(this._closeHandler);
-    this.setWatchlistButtonClickHandler(this._watchlistHandler);
-    this.setWatchedButtonClickHandler(this._watchedHandler);
-    this.setFavoriteButtonClickHandler(this._favoriteHandler);
+    this.setCloseHandler(this._closeButtonClickHandler);
+    this.setWatchlistButtonClickHandler(this._watchlistButtonClickHandler);
+    this.setWatchedButtonClickHandler(this._watchedButtonClickHandler);
+    this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
 
     this._subscribeOnEvents();
   }
@@ -340,7 +328,6 @@ export default class FilmDetail extends AbstractSmartComponent {
       resetWatchedElement.addEventListener(`click`, () => {
         this._film.isWatched = !this._film.isWatched;
         this._film.userRating = false;
-        this._animate = false;
         this.rerender();
       });
     }
@@ -349,16 +336,13 @@ export default class FilmDetail extends AbstractSmartComponent {
       ratingElement.addEventListener(`change`, (evt) => {
         const valueRating = evt.target.value;
         this._film.userRating = valueRating;
-        this._animate = false;
         this.rerender();
       });
     }
 
-
     emojiElement.addEventListener(`change`, (evt) => {
       const valueEmojiID = evt.target.getAttribute(`id`);
       const emojiURL = element.querySelector(`label[for="${valueEmojiID}"] img`).getAttribute(`src`);
-      this._animate = false;
       this._addNewComment(emojiURL, textCommentElement.value);
     });
   }
