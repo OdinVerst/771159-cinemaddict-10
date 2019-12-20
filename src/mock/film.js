@@ -58,6 +58,7 @@ const getRandomReleaseDate = () => {
 export const generateFilm = () => {
   const isWatched = getRandomArrayElement(BoolVals);
   return {
+    id: Symbol(`id`),
     name: getRandomArrayElement(FilmsNames),
     rating: (getRandomInteger(10, 100) / 10).toFixed(1),
     userRating: getUserRating(isWatched),
