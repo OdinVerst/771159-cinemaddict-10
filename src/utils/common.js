@@ -8,13 +8,6 @@ export const getRandomInteger = (min, max) => {
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
 
-export const normalizeSingleDigit = (numder) => {
-  if (numder < 10) {
-    return `0${numder}`;
-  }
-  return numder;
-};
-
 export const getCountNumber = (value) => {
   if (isNaN(Number(value)) && !Array.isArray(value)) {
     throw new Error(`Invalid type value`);
