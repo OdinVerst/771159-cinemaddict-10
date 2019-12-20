@@ -1,5 +1,6 @@
-import {normalizeSingleDigit} from "../utils/common";
-import {MonthNames, MIN_RATING, MAX_RATING} from "../const";
+import moment from "moment";
+
+import {MIN_RATING, MAX_RATING} from "../const";
 import AbstractSmartComponent from "./abstract-smart-component";
 
 const createCommentsMarkup = (comments) => {
@@ -7,8 +8,14 @@ const createCommentsMarkup = (comments) => {
     .map((comment) => {
       const {name, text, date, emoji} = comment;
 
-      const formatDate = `${date.getFullYear()}/${normalizeSingleDigit(date.getMonth() + 1
-      )}/${normalizeSingleDigit(date.getDate())} ${normalizeSingleDigit(date.getHours())}:${normalizeSingleDigit(date.getMinutes())}`;
+      const formatDate = (dateComment) => {
+        const today = moment(new Date());
+        if (today.diff(dateComment, `week`) >= 1) {
+          return moment(dateComment).format(`YYYY/MM/DD hh:mm`);
+        }
+        return moment(dateComment).fromNow();
+      };
+
       return `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
@@ -17,7 +24,7 @@ const createCommentsMarkup = (comments) => {
           <p class="film-details__comment-text">${text}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
-            <span class="film-details__comment-day">${formatDate}</span>
+            <span class="film-details__comment-day">${formatDate(date)}</span>
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
@@ -114,9 +121,7 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
   const actorsMarkup = createListMarkup(actors);
   const genreMarkup = createGenreMarkup(Array.from(genre));
 
-  const formatRelease = `${relaese.getDate()} ${
-    MonthNames[relaese.getMonth() + 1]
-  } ${relaese.getFullYear()}`;
+  const formatRelease = moment(relaese).format(`DD MMMM YYYY`);
 
   const commentsMarkup = createCommentsMarkup(comments);
 
