@@ -27,3 +27,30 @@ export const getMoviesByFilter = (movies, filterType) => {
 
   return movies;
 };
+
+export const pareseFilterItem = {
+  ALL: {
+    name: `All movies`,
+    count() {
+      return;
+    }
+  },
+  WATCHLIST: {
+    name: `Watchlist`,
+    count(length) {
+      return length;
+    }
+  },
+  FAVORITES: {
+    name: `Favorites`,
+    count(length) {
+      return length;
+    }
+  },
+  HISTORY: {
+    name: `History`,
+    count(length) {
+      return length;
+    }
+  }
+};
