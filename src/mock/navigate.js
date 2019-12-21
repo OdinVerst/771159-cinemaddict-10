@@ -1,21 +1,45 @@
-const navigateNames = [`Watchlist`, `History`, `Favorites`];
+const navigateNames = [`all`, `watchlist`, `history`, `favorites`];
 
 const navigeteMethods = {
+  all() {
+    return {
+      name: `All movies`,
+      count() {
+        return;
+      }
+    };
+  },
   watchlist(list) {
-    return list.filter((item) => !!item.isWatchlist).length;
+    return {
+      name: `Watchlist`,
+      count() {
+        return list.filter((item) => !!item.isWatchlist).length;
+      }
+    };
   },
   history(list) {
-    return list.filter((item) => !!item.isWatched).length;
+    return {
+      name: `History`,
+      count() {
+        return list.filter((item) => !!item.isWatched).length;
+      }
+    };
   },
   favorites(list) {
-    return list.filter((item) => !!item.isFavorite).length;
+    return {
+      name: `Favorites`,
+      count() {
+        return list.filter((item) => !!item.isFavorite).length;
+      }
+    };
   },
 };
 
 export const generateNavigate = (films) => {
   let result = [];
   for (let name of navigateNames) {
-    result.push({name, count: navigeteMethods[name.toLocaleLowerCase()](films)});
+    const itemFilter = navigeteMethods[name](films);
+    result.push({name: itemFilter.name, count: itemFilter.count(), url: name});
   }
   return result;
 };
