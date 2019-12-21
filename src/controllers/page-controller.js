@@ -12,20 +12,24 @@ const SHOWING_MOVIES_COUNT_ON_ITERATION = 5;
 let moviesOnList = SHOWING_MOVIES_COUNT_ON_ITERATION;
 
 export default class PageController {
-  constructor(container, movies) {
+  constructor(container, moviesController) {
     this._container = container;
-    this._movies = movies;
+    this._moviesController = moviesController;
+    this._movies = this._moviesController.getMovies();
     this._showedMovieControllers = [];
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
-    this._moviesListComponent = new FilmsList(this._movies.getMovies());
+    this._moviesListComponent = new FilmsList(this._movies);
     this._moviesContainerComponent = new FilmsContainer();
     this._buttonLoadMoreComponent = new ButtonLoadMore();
     this._sortComponent = new Sort();
+
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._moviesController.setFilterChangeHandler(this._onFilterChange);
   }
 
   render() {
@@ -34,7 +38,7 @@ export default class PageController {
 
     render(this._container, this._moviesListComponent);
 
-    let movies = this._movies.getMovies();
+    let movies = this._movies;
 
     if (movies.length) {
       const movieListElement = this._container.querySelector(`.films-list`);
@@ -101,7 +105,7 @@ export default class PageController {
   }
 
   _renderLoadMoreButton(container) {
-    const movies = this._movies.getMovies();
+    const movies = this._movies;
     if (movies.length <= SHOWING_MOVIES_COUNT_ON_ITERATION) {
       return;
     }
@@ -126,7 +130,7 @@ export default class PageController {
 
   _onSortTypeChange(sortType) {
     let sortedMoies = [];
-    let movies = this._movies.getMovies();
+    let movies = this._movies;
 
     switch (sortType) {
       case SortType.DATE:
@@ -149,5 +153,20 @@ export default class PageController {
     } else {
       remove(this._buttonLoadMoreComponent);
     }
+  }
+
+  _removeMovies() {
+    this._moviesContainerComponent.getElement().innerHTML = ``;
+    moviesOnList = SHOWING_MOVIES_COUNT_ON_ITERATION;
+    remove(this._buttonLoadMoreComponent);
+  }
+
+  _onFilterChange() {
+    this._removeMovies();
+    this._movies = this._moviesController.getMovies();
+    this._renderMovies(this._moviesController.getMovies(), SHOWING_MOVIES_COUNT_ON_ITERATION);
+
+    const moviesListElement = this._container.querySelector(`.films-list`);
+    this._renderLoadMoreButton(moviesListElement);
   }
 }

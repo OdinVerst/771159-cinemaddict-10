@@ -43,7 +43,7 @@ export default class Navigate extends AbstractSmartComponent {
         evt.preventDefault();
         const filterName = getFilterNameByHref(evt.currentTarget);
         this._activeFilter = filterName;
-        this._filterChangeHandler(filterName.toUpperCase());
+        this._filterChangeHandler(filterName);
         this.rerender();
       });
     });
