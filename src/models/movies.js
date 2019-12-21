@@ -7,6 +7,7 @@ export default class Movies {
     this._activeFilterType = FilterType.ALL;
 
     this._filterChangeHandlers = [];
+    this._dataChangeHandlers = [];
   }
 
   getMovies() {
@@ -34,11 +35,16 @@ export default class Movies {
     }
 
     this._movies = [].concat(this._movies.slice(0, index), movie, this._movies.slice(index + 1));
+    this._dataChangeHandlers.forEach((handler) => handler());
 
     return true;
   }
 
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
+  }
+
+  setDataChangeHandler(handler) {
+    this._dataChangeHandlers.push(handler);
   }
 }

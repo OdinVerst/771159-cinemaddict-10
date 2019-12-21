@@ -93,7 +93,7 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    const isSuccess = this._movies.updateMovie(oldData.id, newData);
+    const isSuccess = this._moviesController.updateMovie(oldData.id, newData);
 
     if (isSuccess) {
       movieController.render(newData);
