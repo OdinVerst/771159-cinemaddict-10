@@ -32,9 +32,12 @@ export default class MovieController {
     });
     this._setFilmCardClickHandler();
 
-    if (oldFilmDetailComponent && oldFilmComponent) {
-      replace(this._filmComponent, oldFilmComponent);
+    if (oldFilmDetailComponent) {
       oldFilmDetailComponent.updateFilm(movie);
+    }
+
+    if (oldFilmComponent) {
+      replace(this._filmComponent, oldFilmComponent);
     } else {
       render(this._container, this._filmComponent);
     }
