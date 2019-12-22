@@ -82,6 +82,11 @@ export default class MovieController {
       this._onDataChange(this, this._film, updateFilm);
       component.rerender();
     });
+    component.setNewCommentSubmitHandler((newComment)=> {
+      const updateFilm = Object.assign({}, this._film, {comments: [...this._film.comments, newComment]});
+      this._onDataChange(this, this._film, updateFilm);
+      component.rerender();
+    });
     component.setCloseHandler(this._removeFilmDetail);
     document.addEventListener(`keydown`, this._checkEscKeyDown);
   }

@@ -52,6 +52,8 @@ export const UserComments = [`Interesting setting and a good cast`, `Boooooooooo
 
 export const UserRating = [`Movie Buff`, `Proffsessional`, `Junior`];
 
+export const UESR_NAME = `Sergio Razdoly`;
+
 export const COUNT_TOP_MOVIES = 2;
 export const MIN_RATING = 1;
 export const MAX_RATING = 9;
