@@ -32,9 +32,12 @@ export default class MovieController {
     });
     this._setFilmCardClickHandler();
 
-    if (oldFilmDetailComponent && oldFilmComponent) {
-      replace(this._filmComponent, oldFilmComponent);
+    if (oldFilmDetailComponent) {
       oldFilmDetailComponent.updateFilm(movie);
+    }
+
+    if (oldFilmComponent) {
+      replace(this._filmComponent, oldFilmComponent);
     } else {
       render(this._container, this._filmComponent);
     }
@@ -73,6 +76,16 @@ export default class MovieController {
     component.setFavoriteButtonClickHandler(() => {
       const updateFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
       this._onDataChange(this, this._film, updateFilm);
+    });
+    component.setDeleteButtonClickHandler((id)=> {
+      const updateFilm = Object.assign({}, this._film, {comments: this._film.comments.filter((comment) =>comment.id !== Number(id))});
+      this._onDataChange(this, this._film, updateFilm);
+      component.rerender();
+    });
+    component.setNewCommentSubmitHandler((newComment)=> {
+      const updateFilm = Object.assign({}, this._film, {comments: [...this._film.comments, newComment]});
+      this._onDataChange(this, this._film, updateFilm);
+      component.rerender();
     });
     component.setCloseHandler(this._removeFilmDetail);
     document.addEventListener(`keydown`, this._checkEscKeyDown);

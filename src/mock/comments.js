@@ -13,6 +13,7 @@ const getRandomDate = () => {
 
 const generateComment = () => {
   return {
+    id: Date.now() + getRandomInteger(1, 1000),
     name: getRandomArrayElement(UsersNames),
     text: getRandomArrayElement(UserComments),
     date: getRandomDate(),

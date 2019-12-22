@@ -2,12 +2,12 @@ import moment from "moment";
 
 import {MIN_RATING, MAX_RATING} from "../const";
 import AbstractSmartComponent from "./abstract-smart-component";
+import {collectNewComment} from "../utils/comment";
 
 const createCommentsMarkup = (comments) => {
   return comments
     .map((comment) => {
-      const {name, text, date, emoji} = comment;
-
+      const {id, name, text, date, emoji} = comment;
       const formatDate = (dateComment) => {
         const today = moment(new Date());
         if (today.diff(dateComment, `week`) >= 1) {
@@ -25,7 +25,7 @@ const createCommentsMarkup = (comments) => {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${formatDate(date)}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button data-id="${id}" class="film-details__comment-delete">Delete</button>
           </p>
         </div>
       </li>`;
@@ -219,22 +219,22 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
             </label>
 
             <div class="film-details__emoji-list">
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="sleeping">
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
               <label class="film-details__emoji-label" for="emoji-smile">
                 <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="neutral-face">
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
               <label class="film-details__emoji-label" for="emoji-sleeping">
                 <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-gpuke" value="grinning">
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-gpuke" value="puke">
               <label class="film-details__emoji-label" for="emoji-gpuke">
                 <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="grinning">
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
               <label class="film-details__emoji-label" for="emoji-angry">
                 <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
               </label>
@@ -250,20 +250,23 @@ export default class FilmDetail extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
-    this._emoji = null;
+    this._emojiName = null;
+    this._emojiURL = null;
     this._textComment = null;
 
     this._closeButtonClickHandler = null;
     this._watchlistButtonClickHandler = null;
     this._watchedButtonClickHandler = null;
     this._favoriteButtonClickHandler = null;
+    this._deleteButtonClickHandler = null;
+    this._newCommentSubmitHandler = null;
 
     this._container = document.querySelector(`body`);
     this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film, this._emoji, this._textComment);
+    return createFilmPopupTemplate(this._film, this._emojiURL, this._textComment);
   }
 
   getContainer() {
@@ -307,19 +310,44 @@ export default class FilmDetail extends AbstractSmartComponent {
     this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._favoriteButtonClickHandler);
   }
 
+  setDeleteButtonClickHandler(handler) {
+    this._deleteButtonClickHandler = handler;
+    const deleteButtons = this.getElement().querySelectorAll(`.film-details__comment-delete`);
+    [...deleteButtons].forEach((button) => {
+      button.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        const id = evt.currentTarget.getAttribute(`data-id`);
+        this._deleteButtonClickHandler(id);
+      });
+    });
+  }
+
+  setNewCommentSubmitHandler(handler) {
+    this._newCommentSubmitHandler = handler;
+    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, (evt) => {
+      if (evt.key === `Enter` && evt.metaKey && this._textComment && this._emojiName) {
+        const newComment = (collectNewComment(this._textComment, this._emojiName));
+        this.reset();
+        this._newCommentSubmitHandler(newComment);
+      }
+    });
+  }
+
+  reset() {
+    this._textComment = null;
+    this._emojiName = null;
+    this._emojiURL = null;
+  }
+
   recoveryListeners() {
     this.setCloseHandler(this._closeButtonClickHandler);
     this.setWatchlistButtonClickHandler(this._watchlistButtonClickHandler);
     this.setWatchedButtonClickHandler(this._watchedButtonClickHandler);
     this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
+    this.setNewCommentSubmitHandler(this._newCommentSubmitHandler);
 
     this._subscribeOnEvents();
-  }
-
-  _addNewComment(emoji, text) {
-    this._emoji = emoji;
-    this._textComment = text;
-    this.rerender();
   }
 
   _subscribeOnEvents() {
@@ -347,8 +375,13 @@ export default class FilmDetail extends AbstractSmartComponent {
 
     emojiElement.addEventListener(`change`, (evt) => {
       const valueEmojiID = evt.target.getAttribute(`id`);
-      const emojiURL = element.querySelector(`label[for="${valueEmojiID}"] img`).getAttribute(`src`);
-      this._addNewComment(emojiURL, textCommentElement.value);
+      this._emojiName = evt.target.value;
+      this._emojiURL = element.querySelector(`label[for="${valueEmojiID}"] img`).getAttribute(`src`);
+      this.rerender();
+    });
+
+    textCommentElement.addEventListener(`keydown`, (evt) => {
+      this._textComment = evt.target.value;
     });
   }
 }

@@ -1,4 +1,4 @@
-import {COUNT_TOPFILMS} from "../const";
+import {COUNT_TOP_MOVIES} from "../const";
 
 export const getRandomArrayElement = (array) => {
   return array[Math.floor(Math.random() * array.length)];
@@ -15,11 +15,11 @@ export const getCountNumber = (value) => {
   return isNaN(Number(value)) ? value.length : value;
 };
 
-export const getSortTopFilms = (list, characteristic) => {
-  const sortedFilms = getSortFilms(list, characteristic);
-  return getCountNumber(sortedFilms[0][characteristic]) !== 0 ? sortedFilms.slice(0, COUNT_TOPFILMS) : false;
+export const getSortTopMovies = (list, characteristic) => {
+  const sortedMovies = getSortMovies(list, characteristic);
+  return getCountNumber(sortedMovies[0][characteristic]) !== 0 ? sortedMovies.slice(0, COUNT_TOP_MOVIES) : false;
 };
 
-export const getSortFilms = (list, characteristic) => {
+export const getSortMovies = (list, characteristic) => {
   return list.slice().sort((item1, item2) => getCountNumber(item2[characteristic]) - getCountNumber(item1[characteristic]));
 };
