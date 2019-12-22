@@ -35,7 +35,7 @@ export default class Navigate extends AbstractComponent {
 
   setFilterChangeHandler(handler) {
     this._filterChangeHandler = handler;
-    const allFilterItems = this.getElement().querySelectorAll(`.main-navigation__item`);
+    const allFilterItems = this.getElement().querySelectorAll(`.main-navigation__item:not(.main-navigation__item--additional)`);
     [...allFilterItems].forEach((filterItem) => {
       filterItem.addEventListener(`click`, (evt) => {
         evt.preventDefault();
