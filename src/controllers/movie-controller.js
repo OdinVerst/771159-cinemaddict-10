@@ -77,6 +77,11 @@ export default class MovieController {
       const updateFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
       this._onDataChange(this, this._film, updateFilm);
     });
+    component.setDeleteButtonClickHandler((id)=> {
+      const updateFilm = Object.assign({}, this._film, {comments: this._film.comments.filter((comment) =>comment.id !== Number(id))});
+      this._onDataChange(this, this._film, updateFilm);
+      component.rerender();
+    });
     component.setCloseHandler(this._removeFilmDetail);
     document.addEventListener(`keydown`, this._checkEscKeyDown);
   }

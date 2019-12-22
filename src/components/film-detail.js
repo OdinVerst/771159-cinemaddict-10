@@ -6,8 +6,7 @@ import AbstractSmartComponent from "./abstract-smart-component";
 const createCommentsMarkup = (comments) => {
   return comments
     .map((comment) => {
-      const {name, text, date, emoji} = comment;
-
+      const {id, name, text, date, emoji} = comment;
       const formatDate = (dateComment) => {
         const today = moment(new Date());
         if (today.diff(dateComment, `week`) >= 1) {
@@ -25,7 +24,7 @@ const createCommentsMarkup = (comments) => {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${formatDate(date)}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button data-id="${id}" class="film-details__comment-delete">Delete</button>
           </p>
         </div>
       </li>`;
@@ -257,6 +256,7 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._watchlistButtonClickHandler = null;
     this._watchedButtonClickHandler = null;
     this._favoriteButtonClickHandler = null;
+    this._deleteButtonClickHandler = null;
 
     this._container = document.querySelector(`body`);
     this._subscribeOnEvents();
@@ -307,11 +307,24 @@ export default class FilmDetail extends AbstractSmartComponent {
     this.getElement().querySelector(`#favorite`).addEventListener(`click`, this._favoriteButtonClickHandler);
   }
 
+  setDeleteButtonClickHandler(handler) {
+    this._deleteButtonClickHandler = handler;
+    const deleteButtons = this.getElement().querySelectorAll(`.film-details__comment-delete`);
+    [...deleteButtons].forEach((button) => {
+      button.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        const id = evt.currentTarget.getAttribute(`data-id`);
+        this._deleteButtonClickHandler(id);
+      });
+    });
+  }
+
   recoveryListeners() {
     this.setCloseHandler(this._closeButtonClickHandler);
     this.setWatchlistButtonClickHandler(this._watchlistButtonClickHandler);
     this.setWatchedButtonClickHandler(this._watchedButtonClickHandler);
     this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
 
     this._subscribeOnEvents();
   }
