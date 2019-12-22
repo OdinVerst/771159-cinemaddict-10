@@ -327,9 +327,16 @@ export default class FilmDetail extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, (evt) => {
       if (evt.key === `Enter` && evt.metaKey && this._textComment && this._emojiName) {
         const newComment = (collectNewComment(this._textComment, this._emojiName));
+        this.reset();
         this._newCommentSubmitHandler(newComment);
       }
     });
+  }
+
+  reset() {
+    this._textComment = null;
+    this._emojiName = null;
+    this._emojiURL = null;
   }
 
   recoveryListeners() {
