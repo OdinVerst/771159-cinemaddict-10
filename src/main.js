@@ -25,7 +25,9 @@ filterController.render();
 
 const pageController = new PageController(mainElement, moviesModel);
 pageController.render();
-render(mainElement, new Statistics());
+
+const statisticComponent = new Statistics();
+render(mainElement, statisticComponent);
 
 const footerElemet = document.querySelector(`.footer`);
 render(footerElemet, new FooterStatistic(COUNT_FILMS));
