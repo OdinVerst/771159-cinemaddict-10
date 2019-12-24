@@ -65,6 +65,14 @@ export default class PageController {
     }
   }
 
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   _renderMovies(movies, count = movies.length) {
     const itaration = Math.round(moviesOnList / SHOWING_MOVIES_COUNT_ON_ITERATION);
     const start = ((itaration - 1) * SHOWING_MOVIES_COUNT_ON_ITERATION);

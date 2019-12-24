@@ -28,6 +28,7 @@ pageController.render();
 
 const statisticComponent = new Statistics();
 render(mainElement, statisticComponent);
+statisticComponent.hide();
 
 const footerElemet = document.querySelector(`.footer`);
 render(footerElemet, new FooterStatistic(COUNT_FILMS));
