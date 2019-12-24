@@ -6,6 +6,7 @@ import FooterStatistic from "./components/footer-statistic";
 import {generateFilms} from './mock/film';
 import {generateUserRating} from './mock/user-rating';
 import {render} from "./utils/render";
+import Statistics from "./components/statistics";
 
 
 const mainElement = document.querySelector(`.main`);
@@ -24,6 +25,7 @@ filterController.render();
 
 const pageController = new PageController(mainElement, moviesModel);
 pageController.render();
+render(mainElement, new Statistics());
 
 const footerElemet = document.querySelector(`.footer`);
 render(footerElemet, new FooterStatistic(COUNT_FILMS));
