@@ -66,11 +66,13 @@ export default class PageController {
   }
 
   hide() {
-    this._container.hide();
+    this._sortComponent.hide();
+    this._moviesListComponent.hide();
   }
 
   show() {
-    this._container.show();
+    this._sortComponent.show();
+    this._moviesListComponent.show();
   }
 
   _renderMovies(movies, count = movies.length) {

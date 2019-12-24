@@ -41,6 +41,13 @@ export default class FilterController {
     }
   }
 
+  onChangeFilter(handler) {
+    console.log(1);
+    if (this._filterComponent) {
+      this._filterComponent.setNavigateItemClickHandler(handler);
+    }
+  }
+
   _onFilterChange(filterType) {
     this._movieModel.setFilter(filterType);
     this._activeFilterType = filterType;

@@ -64,3 +64,8 @@ export const FilterType = {
   FAVORITES: `favorites`,
   HISTORY: `history`
 };
+
+export const NavigateType = {
+  STATISTIC: `stats`,
+  FILTER: `filter`
+};

@@ -7,6 +7,7 @@ import {generateFilms} from './mock/film';
 import {generateUserRating} from './mock/user-rating';
 import {render} from "./utils/render";
 import Statistics from "./components/statistics";
+import {NavigateType} from "./const";
 
 
 const mainElement = document.querySelector(`.main`);
@@ -18,15 +19,29 @@ const ALL_FILMS = generateFilms(COUNT_FILMS);
 const moviesModel = new Movies();
 moviesModel.setMovies(ALL_FILMS);
 
+const statisticComponent = new Statistics();
+const pageController = new PageController(mainElement, moviesModel);
+
 render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));
 
 const filterController = new FilterController(mainElement, moviesModel);
 filterController.render();
 
-const pageController = new PageController(mainElement, moviesModel);
+filterController.onChangeFilter((typeNavigate) => {
+  switch (typeNavigate) {
+    case NavigateType.FILTER:
+      statisticComponent.hide();
+      pageController.show();
+      break;
+    case NavigateType.STATISTIC:
+      statisticComponent.show();
+      pageController.hide();
+      break;
+  }
+});
+
 pageController.render();
 
-const statisticComponent = new Statistics();
 render(mainElement, statisticComponent);
 statisticComponent.hide();
 

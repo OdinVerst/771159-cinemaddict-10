@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component";
+import {NavigateType} from "../const";
 
 const getFilterNameByHref = (filterName) => {
   return filterName.getAttribute(`href`).substring(1);
@@ -27,6 +28,7 @@ export default class Navigate extends AbstractComponent {
     this._navigateList = navigateItems;
 
     this._filterChangeHandler = null;
+    this._activePart = NavigateType.FILTER;
   }
 
   getTemplate() {
@@ -41,6 +43,22 @@ export default class Navigate extends AbstractComponent {
         evt.preventDefault();
         const filterName = getFilterNameByHref(evt.currentTarget);
         this._filterChangeHandler(filterName);
+      });
+    });
+  }
+
+  setNavigateItemClickHandler(handler) {
+    const allNavigateItems = this.getElement().querySelectorAll(`.main-navigation__item`);
+    [...allNavigateItems].forEach((navigateItem) => {
+      navigateItem.addEventListener(`click`, (evt)=> {
+        evt.preventDefault();
+        if (evt.target.classList.contains(`main-navigation__item--additional`)) {
+          this._activePart = NavigateType.STATISTIC;
+        } else {
+          this._activePart = NavigateType.FILTER;
+        }
+
+        handler(this._activePart);
       });
     });
   }
