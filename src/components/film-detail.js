@@ -1,8 +1,8 @@
 import moment from "moment";
-
 import {MIN_RATING, MAX_RATING} from "../const";
 import AbstractSmartComponent from "./abstract-smart-component";
 import {collectNewComment} from "../utils/comment";
+import {parseDuration} from "../utils/common";
 
 const createCommentsMarkup = (comments) => {
   return comments
@@ -122,6 +122,7 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
   const genreMarkup = createGenreMarkup(Array.from(genre));
 
   const formatRelease = moment(relaese).format(`DD MMMM YYYY`);
+  const formatDuration = parseDuration(duration);
 
   const commentsMarkup = createCommentsMarkup(comments);
 
@@ -170,7 +171,7 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${duration}</td>
+                <td class="film-details__cell">${formatDuration}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>

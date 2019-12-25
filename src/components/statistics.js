@@ -1,7 +1,9 @@
 import AbstractSmartComponent from "./abstract-smart-component";
+import {parseStatisticsDuration} from "../utils/common";
 
 const createStatisticsTemplate = (movies) => {
-  const moviesCount = movies.length;
+  const moviesWatched = movies.filter((movie) => movie.isWatched);
+  const durationWatched = parseStatisticsDuration(movies.reduce((a, b) => a + b.duration, 0));
   return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
@@ -31,11 +33,11 @@ const createStatisticsTemplate = (movies) => {
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${moviesCount}<span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${moviesWatched.length}<span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+        <p class="statistic__item-text">${durationWatched.hours}<span class="statistic__item-description">h</span>${durationWatched.minutes} <span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>

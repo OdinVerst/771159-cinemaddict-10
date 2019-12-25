@@ -1,3 +1,4 @@
+import moment from "moment";
 import {COUNT_TOP_MOVIES} from "../const";
 
 export const getRandomArrayElement = (array) => {
@@ -22,4 +23,16 @@ export const getSortTopMovies = (list, characteristic) => {
 
 export const getSortMovies = (list, characteristic) => {
   return list.slice().sort((item1, item2) => getCountNumber(item2[characteristic]) - getCountNumber(item1[characteristic]));
+};
+
+export const parseDuration = (time) => {
+  return moment.utc(moment.duration(time, `minutes`).asMilliseconds()).format(`h[h] mm[m]`);
+};
+
+export const parseStatisticsDuration = (time) => {
+  const result = moment.duration(time, `minutes`);
+  return {
+    hours: result.hours(),
+    minutes: result.minutes()
+  };
 };
