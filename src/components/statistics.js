@@ -1,14 +1,34 @@
+import Chart from 'chart.js';
 import AbstractSmartComponent from "./abstract-smart-component";
-import {parseStatisticsDuration} from "../utils/common";
+import {parseStatisticsDuration, getTorGenere} from "../utils/statistic";
+import {generateUserRating} from "../utils/user-rating";
+
+const renderChart = (movies) => {
+  const statisticCanvasElement = document.querySelector(`.statistic__chart`);
+  const statisticCnvasContext = statisticCanvasElement.getContext(`2d`);
+
+  const test = new Chart(statisticCnvasContext, {
+    type: `horizontalBar`,
+    data: {
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+    showTooltips: false,
+    plugins: [],
+    options: []
+  });
+};
 
 const createStatisticsTemplate = (movies) => {
   const moviesWatched = movies.filter((movie) => movie.isWatched);
   const durationWatched = parseStatisticsDuration(movies.reduce((a, b) => a + b.duration, 0));
+  const rating = generateUserRating(movies);
+  const topGenere = getTorGenere(moviesWatched);
   return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Sci-Fighter</span>
+      <span class="statistic__rank-label">${rating}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -41,7 +61,7 @@ const createStatisticsTemplate = (movies) => {
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">Sci-Fi</p>
+        <p class="statistic__item-text">${topGenere}</p>
       </li>
     </ul>
 
@@ -60,5 +80,9 @@ export default class Statistics extends AbstractSmartComponent {
   }
   getTemplate() {
     return createStatisticsTemplate(this._movies);
+  }
+
+  setStatisticsFiltesChangeHandler(handler) {
+    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, handler);
   }
 }

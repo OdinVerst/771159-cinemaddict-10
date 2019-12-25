@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component";
-import { parseDuration } from "../utils/common";
+import {parseDuration} from "../utils/common";
 
 const isActive = (prop) => {
   return prop ? `film-card__controls-item--active` : ``;

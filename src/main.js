@@ -4,7 +4,7 @@ import UserProfile from "./components/user-profile";
 import FilterController from "./controllers/filter-controller";
 import FooterStatistic from "./components/footer-statistic";
 import {generateFilms} from './mock/film';
-import {generateUserRating} from './mock/user-rating';
+import {generateUserRating} from './utils/user-rating';
 import {render} from "./utils/render";
 import Statistics from "./components/statistics";
 import {NavigateType} from "./const";
@@ -20,6 +20,9 @@ const moviesModel = new Movies();
 moviesModel.setMovies(ALL_FILMS);
 
 const statisticComponent = new Statistics(ALL_FILMS);
+statisticComponent.setStatisticsFiltesChangeHandler(()=> {
+  console.log(1);
+});
 const pageController = new PageController(mainElement, moviesModel);
 
 render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));

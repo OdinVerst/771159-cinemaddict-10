@@ -28,11 +28,3 @@ export const getSortMovies = (list, characteristic) => {
 export const parseDuration = (time) => {
   return moment.utc(moment.duration(time, `minutes`).asMilliseconds()).format(`h[h] mm[m]`);
 };
-
-export const parseStatisticsDuration = (time) => {
-  const result = moment.duration(time, `minutes`);
-  return {
-    hours: result.hours(),
-    minutes: result.minutes()
-  };
-};
