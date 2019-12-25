@@ -27,7 +27,7 @@ render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));
 const filterController = new FilterController(mainElement, moviesModel);
 filterController.render();
 
-filterController.onChangeFilter((typeNavigate) => {
+filterController.watchFilterValue((typeNavigate) => {
   switch (typeNavigate) {
     case NavigateType.FILTER:
       statisticComponent.hide();

@@ -15,10 +15,14 @@ const createNavigateItemsMarkup = (list) => {
 };
 
 const createNavigateTemplate = (list) => {
+  const isFilterActive = () => {
+    const result = list.filter((item) => item.checked);
+    return result.length ? true : false;
+  };
   const navigateItems = createNavigateItemsMarkup(list);
   return `<nav class="main-navigation">
     ${navigateItems}
-    <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
+    <a href="#stats" class="main-navigation__item main-navigation__item--additional ${isFilterActive() ? `` : `main-navigation__item--active`}">Stats</a>
   </nav>`;
 };
 
@@ -35,30 +39,14 @@ export default class Navigate extends AbstractComponent {
     return createNavigateTemplate(this._navigateList);
   }
 
-  setFilterChangeHandler(handler) {
+  setNavigateChangeHandler(handler) {
     this._filterChangeHandler = handler;
-    const allFilterItems = this.getElement().querySelectorAll(`.main-navigation__item:not(.main-navigation__item--additional)`);
+    const allFilterItems = this.getElement().querySelectorAll(`.main-navigation__item`);
     [...allFilterItems].forEach((filterItem) => {
       filterItem.addEventListener(`click`, (evt) => {
         evt.preventDefault();
         const filterName = getFilterNameByHref(evt.currentTarget);
         this._filterChangeHandler(filterName);
-      });
-    });
-  }
-
-  setNavigateItemClickHandler(handler) {
-    const allNavigateItems = this.getElement().querySelectorAll(`.main-navigation__item`);
-    [...allNavigateItems].forEach((navigateItem) => {
-      navigateItem.addEventListener(`click`, (evt)=> {
-        evt.preventDefault();
-        if (evt.target.classList.contains(`main-navigation__item--additional`)) {
-          this._activePart = NavigateType.STATISTIC;
-        } else {
-          this._activePart = NavigateType.FILTER;
-        }
-
-        handler(this._activePart);
       });
     });
   }
