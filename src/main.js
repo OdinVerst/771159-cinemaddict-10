@@ -19,7 +19,7 @@ const ALL_FILMS = generateFilms(COUNT_FILMS);
 const moviesModel = new Movies();
 moviesModel.setMovies(ALL_FILMS);
 
-const statisticComponent = new Statistics();
+const statisticComponent = new Statistics(ALL_FILMS);
 const pageController = new PageController(mainElement, moviesModel);
 
 render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));

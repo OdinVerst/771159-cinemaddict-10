@@ -1,6 +1,7 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
 
-const createStatisticsTemplate = () => {
+const createStatisticsTemplate = (movies) => {
+  const moviesCount = movies.length;
   return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
@@ -30,7 +31,7 @@ const createStatisticsTemplate = () => {
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${moviesCount}<span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
@@ -50,8 +51,12 @@ const createStatisticsTemplate = () => {
 `;
 };
 
-export default class Statistics extends AbstractComponent {
+export default class Statistics extends AbstractSmartComponent {
+  constructor(movies) {
+    super();
+    this._movies = movies;
+  }
   getTemplate() {
-    return createStatisticsTemplate();
+    return createStatisticsTemplate(this._movies);
   }
 }
