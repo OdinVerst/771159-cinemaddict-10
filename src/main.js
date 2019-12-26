@@ -6,8 +6,8 @@ import FooterStatistic from "./components/footer-statistic";
 import {generateFilms} from './mock/film';
 import {generateUserRating} from './utils/user-rating';
 import {render} from "./utils/render";
-import Statistics from "./components/statistics";
 import {NavigateType} from "./const";
+import StatisticsController from "./controllers/statistics-controller";
 
 
 const mainElement = document.querySelector(`.main`);
@@ -19,10 +19,6 @@ const ALL_FILMS = generateFilms(COUNT_FILMS);
 const moviesModel = new Movies();
 moviesModel.setMovies(ALL_FILMS);
 
-const statisticComponent = new Statistics(ALL_FILMS);
-statisticComponent.setStatisticsFiltesChangeHandler(()=> {
-  console.log(1);
-});
 const pageController = new PageController(mainElement, moviesModel);
 
 render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));
@@ -30,14 +26,17 @@ render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));
 const filterController = new FilterController(mainElement, moviesModel);
 filterController.render();
 
+const statisticController = new StatisticsController(mainElement, moviesModel);
+statisticController.render();
+
 filterController.watchFilterValue((typeNavigate) => {
   switch (typeNavigate) {
     case NavigateType.FILTER:
-      statisticComponent.hide();
+      statisticController.hide();
       pageController.show();
       break;
     case NavigateType.STATISTIC:
-      statisticComponent.show();
+      statisticController.show();
       pageController.hide();
       break;
   }
@@ -45,8 +44,6 @@ filterController.watchFilterValue((typeNavigate) => {
 
 pageController.render();
 
-render(mainElement, statisticComponent);
-statisticComponent.hide();
 
 const footerElemet = document.querySelector(`.footer`);
 render(footerElemet, new FooterStatistic(COUNT_FILMS));

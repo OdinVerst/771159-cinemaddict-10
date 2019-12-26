@@ -1,22 +1,11 @@
 import Chart from 'chart.js';
-import AbstractSmartComponent from "./abstract-smart-component";
+import AbstractComponent from "./abstract-component";
 import {parseStatisticsDuration, getTorGenere} from "../utils/statistic";
 import {generateUserRating} from "../utils/user-rating";
 
 const renderChart = (movies) => {
   const statisticCanvasElement = document.querySelector(`.statistic__chart`);
   const statisticCnvasContext = statisticCanvasElement.getContext(`2d`);
-
-  const test = new Chart(statisticCnvasContext, {
-    type: `horizontalBar`,
-    data: {
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    showTooltips: false,
-    plugins: [],
-    options: []
-  });
 };
 
 const createStatisticsTemplate = (movies) => {
@@ -73,7 +62,7 @@ const createStatisticsTemplate = (movies) => {
 `;
 };
 
-export default class Statistics extends AbstractSmartComponent {
+export default class Statistics extends AbstractComponent {
   constructor(movies) {
     super();
     this._movies = movies;
