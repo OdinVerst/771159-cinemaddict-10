@@ -1,6 +1,7 @@
 import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import AbstractComponent from "./abstract-component";
-import {parseStatisticsDuration, getTorGenere} from "../utils/statistic";
+import {parseStatisticsDuration, getTorGenre, getNamesGenres, getValuesGenres} from "../utils/statistic";
 
 const createStatisticsFilterTemplate = (active) => {
   const normalizeValue = (value) => {
@@ -16,7 +17,7 @@ const createStatisticsFilterTemplate = (active) => {
 
 const createStatisticsTemplate = ({movies, userRating, activeStatisticFilter}) => {
   const durationWatched = parseStatisticsDuration(movies.reduce((a, b) => a + b.duration, 0));
-  const topGenere = getTorGenere(movies);
+  const topGenere = getTorGenre(movies);
   return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
@@ -68,8 +69,90 @@ export default class Statistics extends AbstractComponent {
     });
   }
 
-  renderChart() {
-    const statisticCanvasElement = this.getElement.querySelector(`.statistic__chart`);
-    const statisticCnvasContext = statisticCanvasElement.getContext(`2d`);
+  renderChart(genres) {
+    const genresLabels = getNamesGenres(genres);
+    const genresValues = getValuesGenres(genres);
+
+    const Settings = {
+      HEIGHT_PROGRESS_BAR: 30,
+      COLOR_PROGRESS_BAR: `#ffe800`,
+      FONT_SIZE: 18,
+      COLOR_TEXT: `#ffffff`,
+      LIMIT: {
+        MIN_X: 0,
+        MAX_X: Math.max(...genresValues)
+      },
+      LABEL: {
+        OFFSET: 50,
+        PADDING: 100,
+        ALLIGN: `left`,
+      }
+    };
+
+    const statisticCanvasElement = this.getElement().querySelector(`.statistic__chart`);
+    statisticCanvasElement.height = Settings.HEIGHT_PROGRESS_BAR * genresLabels.length;
+
+    const statisticCanvasContext = statisticCanvasElement.getContext(`2d`);
+
+    const LABEL_ANCHOR = `start`;
+
+    const chartData = {
+      labels: genresLabels,
+      datasets: [{
+        data: genresValues,
+        backgroundColor: Settings.COLOR_PROGRESS_BAR
+      }]
+    };
+
+    const chartOptions = {
+      plugins: {
+        datalabels: {
+          color: Settings.COLOR_TEXT,
+          font: {
+            size: Settings.FONT_SIZE,
+          },
+          anchor: LABEL_ANCHOR,
+          align: Settings.LABEL.ALLIGN,
+          offset: Settings.LABEL.OFFSET,
+        }
+      },
+      scales: {
+        xAxes: [{
+          display: false,
+          ticks: {
+            suggestedMin: Settings.LIMIT.MIN_X,
+            suggestedMax: Settings.LIMIT.MAX_X
+          }
+        }],
+        yAxes: [{
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          ticks: {
+            fontColor: Settings.COLOR_TEXT,
+            fontSize: Settings.FONT_SIZE,
+            padding: Settings.LABEL.PADDING,
+          }
+        }]
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false
+      }
+    };
+
+
+    this._statisticChart = new Chart(statisticCanvasContext, {
+      type: `horizontalBar`,
+      data: chartData,
+      responsive: true,
+      maintainAspectRatio: false,
+      showTooltips: false,
+      plugins: [ChartDataLabels],
+      options: chartOptions
+    });
   }
 }

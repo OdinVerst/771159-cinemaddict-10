@@ -9,22 +9,28 @@ export const parseStatisticsDuration = (time) => {
   };
 };
 
-export const getTorGenere = (wachedFilms) => {
-  if (!wachedFilms.length) {
-    return `-`;
-  }
+export const getAllGenres = (movies) => {
   const allGenere = {};
-  let maxValue = 0;
-  let genereValue;
-  wachedFilms.forEach((film) => {
+  movies.forEach((film) => {
     [...film.genre].forEach((genre) => {
       allGenere[genre] = (allGenere[genre] || 0) + 1;
     });
   });
 
-  for (let key in allGenere) {
-    if (maxValue < allGenere[key]) {
-      maxValue = allGenere[key];
+  return allGenere;
+};
+
+export const getTorGenre = (wachedMovies) => {
+  if (!wachedMovies.length) {
+    return `-`;
+  }
+  const allGenres = getAllGenres(wachedMovies);
+  let maxValue = 0;
+  let genereValue;
+
+  for (let key in allGenres) {
+    if (maxValue < allGenres[key]) {
+      maxValue = allGenres[key];
       genereValue = key;
     }
   }
@@ -56,4 +62,12 @@ export const getMoviesByPeriod = (movies, period) => {
       return getWatchedFilmsByPeriod(movies, period);
   }
   return movies;
+};
+
+export const getNamesGenres = (movies) => {
+  return Object.keys(getAllGenres(movies));
+};
+
+export const getValuesGenres = (movies) => {
+  return Object.values(getAllGenres(movies));
 };

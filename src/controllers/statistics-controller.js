@@ -32,6 +32,10 @@ export default class StatisticsController {
     };
 
     this._statisticComponent = new Statistics(wachedMovies);
+    if (wachedMovies.movies.length) {
+      this._statisticComponent.renderChart(wachedMovies.movies);
+    }
+
     this._statisticComponent.setStatisticsFiltesChangeHandler(this._onStatisticsFiltesChange);
 
     if (oldComponent) {
