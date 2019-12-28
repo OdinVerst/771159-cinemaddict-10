@@ -1,6 +1,8 @@
 import {StatisticType} from "../const";
 import Statistics from "../components/statistics";
 import {render, replace} from "../utils/render";
+import {getMoviesByPeriod} from "../utils/statistic";
+import {generateUserRating} from "../utils/user-rating";
 
 export default class StatisticsController {
   constructor(container, moviesModel) {
@@ -12,6 +14,7 @@ export default class StatisticsController {
     this._statisticComponent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
+    this._onStatisticsFiltesChange = this._onStatisticsFiltesChange.bind(this);
 
     this._moviesModel.setDataChangeHandler(this._onDataChange);
   }
@@ -22,7 +25,14 @@ export default class StatisticsController {
 
     const oldComponent = this._statisticComponent;
 
-    this._statisticComponent = new Statistics(allMovies);
+    const wachedMovies = {
+      userRating: generateUserRating(allMovies),
+      movies: getMoviesByPeriod(allMovies, this._activeStatisticFilter),
+      activeStatisticFilter: this._activeStatisticFilter
+    };
+
+    this._statisticComponent = new Statistics(wachedMovies);
+    this._statisticComponent.setStatisticsFiltesChangeHandler(this._onStatisticsFiltesChange);
 
     if (oldComponent) {
       replace(this._statisticComponent, oldComponent);
@@ -45,8 +55,12 @@ export default class StatisticsController {
     this._statisticComponent.show();
   }
 
+  _onStatisticsFiltesChange(statisticsFilterType) {
+    this._activeStatisticFilter = statisticsFilterType;
+    this.render();
+  }
+
   _onDataChange() {
-    console.log(this);
     this.render();
   }
 }

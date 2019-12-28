@@ -39,6 +39,17 @@ const getUserRating = (wached) => {
   return getRandomInteger(MIN_RATING, MAX_RATING);
 };
 
+const getUserDate = (wached) => {
+  if (!wached) {
+    return false;
+  }
+
+  const start = new Date(2019, 8, 10);
+  const end = new Date();
+
+  return new Date(getRandomInteger(start.getTime(), end.getTime()));
+};
+
 const getRandomReleaseDate = () => {
   const start = new Date(1930, 0, 1);
   const end = new Date();
@@ -53,6 +64,7 @@ export const generateFilm = () => {
     name: getRandomArrayElement(FilmsNames),
     rating: (getRandomInteger(10, 100) / 10).toFixed(1),
     userRating: getUserRating(isWatched),
+    userDateWatch: getUserDate(isWatched),
     age: getRandomArrayElement(Ages),
     relaese: getRandomReleaseDate(),
     duration: getRandomInteger(60, 120),
