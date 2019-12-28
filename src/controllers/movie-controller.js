@@ -2,8 +2,6 @@ import FilmCard from "../components/film-card";
 import FilmDetail from "../components/film-detail";
 import {remove, render, replace} from "../utils/render";
 
-const Controls = [`Watched`, `Watchlist`, `Favorite`];
-
 export default class MovieController {
   constructor(container, onDataChange, onViewChange) {
     this._container = container;
@@ -26,10 +24,8 @@ export default class MovieController {
     const oldFilmDetailComponent = this._filmDetailComponent;
 
     this._filmComponent = new FilmCard(this._film);
+    this._setFilmCardControlHandlers();
 
-    Controls.forEach((control)=> {
-      this._setFilmCardControlHandler(control);
-    });
     this._setFilmCardClickHandler();
 
     if (oldFilmDetailComponent) {
@@ -53,11 +49,22 @@ export default class MovieController {
     });
   }
 
-  _setFilmCardControlHandler(type) {
-    this._filmComponent[`set${type}ButtonClickHandler`]((evt) => {
+  _setFilmCardControlHandlers() {
+    this._filmComponent[`setWatchedButtonClickHandler`]((evt) => {
       evt.preventDefault();
-      const key = `is${type}`;
-      const updateFilm = Object.assign({}, this._film, {[key]: !this._film[key]});
+      const updateFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched, userDateWatch: new Date()});
+      this._onDataChange(this, this._film, updateFilm);
+    });
+
+    this._filmComponent[`setWatchlistButtonClickHandler`]((evt) => {
+      evt.preventDefault();
+      const updateFilm = Object.assign({}, this._film, {isWatchlist: !this._film.isWatchlist});
+      this._onDataChange(this, this._film, updateFilm);
+    });
+
+    this._filmComponent[`setFavoriteButtonClickHandler`]((evt) => {
+      evt.preventDefault();
+      const updateFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
       this._onDataChange(this, this._film, updateFilm);
     });
   }
@@ -65,7 +72,7 @@ export default class MovieController {
   _filmDetailAllHandlers(component) {
     this._existFilmDetailHandler = true;
     component.setWatchedButtonClickHandler(() => {
-      const updateFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched});
+      const updateFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched, userDateWatch: new Date()});
       this._onDataChange(this, this._film, updateFilm);
       component.rerender();
     });
