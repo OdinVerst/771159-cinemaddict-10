@@ -65,6 +65,16 @@ export default class PageController {
     }
   }
 
+  hide() {
+    this._sortComponent.hide();
+    this._moviesListComponent.hide();
+  }
+
+  show() {
+    this._sortComponent.show();
+    this._moviesListComponent.show();
+  }
+
   _renderMovies(movies, count = movies.length) {
     const itaration = Math.round(moviesOnList / SHOWING_MOVIES_COUNT_ON_ITERATION);
     const start = ((itaration - 1) * SHOWING_MOVIES_COUNT_ON_ITERATION);

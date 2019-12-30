@@ -64,3 +64,23 @@ export const FilterType = {
   FAVORITES: `favorites`,
   HISTORY: `history`
 };
+
+export const StatisticType = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+export const StatisticPeriod = {
+  [StatisticType.TODAY]: `days`,
+  [StatisticType.WEEK]: `week`,
+  [StatisticType.MONTH]: `month`,
+  [StatisticType.YEAR]: `year`
+};
+
+export const NavigateType = {
+  STATISTIC: `stats`,
+  FILTER: `filter`
+};

@@ -4,15 +4,6 @@ import {generateCommenst} from "./comments";
 
 const BoolVals = [true, false];
 
-const getRandomDuration = () => {
-  const hours = getRandomInteger(1, 3);
-  let minutes = getRandomInteger(0, 59);
-  if (minutes < 10) {
-    minutes = `0${minutes}`;
-  }
-  return `${hours}h ${minutes}m`;
-};
-
 const getRandomDescription = (films) => {
   const count = getRandomInteger(1, 3);
   return [...new Array(count)].map(()=> {
@@ -48,6 +39,17 @@ const getUserRating = (wached) => {
   return getRandomInteger(MIN_RATING, MAX_RATING);
 };
 
+const getUserDate = (wached) => {
+  if (!wached) {
+    return false;
+  }
+
+  const start = new Date(2019, 8, 10);
+  const end = new Date();
+
+  return new Date(getRandomInteger(start.getTime(), end.getTime()));
+};
+
 const getRandomReleaseDate = () => {
   const start = new Date(1930, 0, 1);
   const end = new Date();
@@ -62,9 +64,10 @@ export const generateFilm = () => {
     name: getRandomArrayElement(FilmsNames),
     rating: (getRandomInteger(10, 100) / 10).toFixed(1),
     userRating: getUserRating(isWatched),
+    userDateWatch: getUserDate(isWatched),
     age: getRandomArrayElement(Ages),
     relaese: getRandomReleaseDate(),
-    duration: getRandomDuration(),
+    duration: getRandomInteger(60, 120),
     genre: new Set(getRandomGenres()),
     poster: getRandomArrayElement(FilmsPoster),
     description: getRandomDescription(FilmsDescriptons),

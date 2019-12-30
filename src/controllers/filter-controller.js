@@ -1,5 +1,5 @@
 import Navigate from "../components/navigate";
-import {FilterType} from "../const";
+import {FilterType, NavigateType} from "../const";
 import {getMoviesByFilter, pareseFilterItem} from "../utils/filter";
 import {replace, render} from "../utils/render";
 
@@ -9,6 +9,7 @@ export default class FilterController {
     this._movieModel = movieModel;
     this._activeFilterType = FilterType.ALL;
     this._filterComponent = null;
+    this._watchFilterHandler = null;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
@@ -32,7 +33,7 @@ export default class FilterController {
     const oldComponent = this._filterComponent;
 
     this._filterComponent = new Navigate(filters);
-    this._filterComponent.setFilterChangeHandler(this._onFilterChange);
+    this._filterComponent.setNavigateChangeHandler(this._onFilterChange);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
@@ -41,9 +42,18 @@ export default class FilterController {
     }
   }
 
+  watchFilterValue(handler) {
+    this._watchFilterHandler = handler;
+    if (this._activeFilterType === NavigateType.STATISTIC) {
+      return this._watchFilterHandler(NavigateType.STATISTIC);
+    }
+    return this._watchFilterHandler(NavigateType.FILTER);
+  }
+
   _onFilterChange(filterType) {
     this._movieModel.setFilter(filterType);
     this._activeFilterType = filterType;
+    this.watchFilterValue(this._watchFilterHandler);
     this.render();
   }
 
