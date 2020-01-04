@@ -1,3 +1,5 @@
+import Movie from "./models/movie";
+
 const Methods = {
   GET: `GET`,
   POST: `POST`,
@@ -20,7 +22,9 @@ export default class API {
   }
 
   getMovies() {
-
+    return this._load({url: `movies`})
+    .then((response) => response.json())
+    .then(Movie.parseMovies);
   }
 
   updateMovie(idMove, data) {
@@ -37,5 +41,15 @@ export default class API {
 
   addNewComment(data) {
 
+  }
+
+  _load({url, method = Methods.GET, body = null, headers = new Headers()}) {
+    headers.append(`Authorization`, this._authorization);
+
+    return fetch(`${this._endPoint}/${url}`, {method, body, headers})
+      .then(checkStatus)
+      .catch((err) => {
+        throw err;
+      });
   }
 }

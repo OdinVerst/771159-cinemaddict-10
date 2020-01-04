@@ -8,10 +8,17 @@ import {generateUserRating} from './utils/user-rating';
 import {render} from "./utils/render";
 import {NavigateType} from "./const";
 import StatisticsController from "./controllers/statistics-controller";
+import API from "./api";
+
+const AUTHORIZATION = `Basic testKey=`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 
 const mainElement = document.querySelector(`.main`);
 const headerElement = document.querySelector(`.header`);
+
+const test = new API(AUTHORIZATION, END_POINT);
+console.log(test.getMovies());
 
 const COUNT_FILMS = 22;
 const ALL_FILMS = generateFilms(COUNT_FILMS);
