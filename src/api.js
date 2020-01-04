@@ -14,5 +14,28 @@ const checkStatus = (response) => {
 };
 
 export default class API {
+  constructor(authorization, endPoint) {
+    this._authorization = authorization;
+    this._endPoint = endPoint;
+  }
 
+  getMovies() {
+
+  }
+
+  updateMovie(idMove, data) {
+
+  }
+
+  getComments(idMove) {
+
+  }
+
+  deleteComment(idComment) {
+
+  }
+
+  addNewComment(data) {
+
+  }
 }
