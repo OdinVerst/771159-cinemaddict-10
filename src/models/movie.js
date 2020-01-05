@@ -1,9 +1,19 @@
 
+const Sections = {
+  INFO: `film_info`,
+  USER: `user_details`
+};
+
 export default class Movie {
   constructor(data) {
     this.id = data[`id`];
-
     this.comments = data[`comments`] || [];
+
+    if (data[Sections.INFO]) {
+      this.name = data[Sections.INFO].title;
+      this.alternaiveName = data[Sections.INFO].alternative_title;
+      this.poster = data[Sections.INFO].poster;
+    }
 
   }
 
