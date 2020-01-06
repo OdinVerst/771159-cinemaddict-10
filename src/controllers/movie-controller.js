@@ -3,7 +3,7 @@ import FilmDetail from "../components/film-detail";
 import {remove, render, replace} from "../utils/render";
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, api) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
@@ -13,6 +13,7 @@ export default class MovieController {
     this._filmDetailComponent = null;
     this._filmDetialOpen = false;
     this._existFilmDetailHandler = false;
+    this._api = api;
 
     this._checkEscKeyDown = this._checkEscKeyDown.bind(this);
     this._removeFilmDetail = this._removeFilmDetail.bind(this);
@@ -42,6 +43,8 @@ export default class MovieController {
   _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
       this._filmDetailComponent = new FilmDetail(this._film);
+      console.log(this._film);
+      this._api.getComments(this._film.id);
       this._filmDetailAllHandlers(this._filmDetailComponent);
       render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
       this._onViewChange();

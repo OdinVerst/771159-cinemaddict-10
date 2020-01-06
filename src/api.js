@@ -32,7 +32,9 @@ export default class API {
   }
 
   getComments(idMove) {
-
+    return this._load({url: `comments/${idMove}`})
+    .then((response) => response.json())
+    .then((json) => console.log(json));
   }
 
   deleteComment(idComment) {

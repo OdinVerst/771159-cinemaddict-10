@@ -19,7 +19,7 @@ const footerElemet = document.querySelector(`.footer`);
 const moviesModel = new Movies();
 const api = new API(AUTHORIZATION, END_POINT);
 
-const pageController = new PageController(mainElement, moviesModel);
+const pageController = new PageController(mainElement, moviesModel, api);
 
 api.getMovies()
   .then((movies) => {

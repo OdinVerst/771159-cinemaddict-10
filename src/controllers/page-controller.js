@@ -12,10 +12,11 @@ const SHOWING_MOVIES_COUNT_ON_ITERATION = 5;
 let moviesOnList = SHOWING_MOVIES_COUNT_ON_ITERATION;
 
 export default class PageController {
-  constructor(container, moviesController) {
+  constructor(container, moviesController, api) {
     this._container = container;
     this._moviesController = moviesController;
     this._movies = [];
+    this._api = api;
     this._showedMovieControllers = [];
 
     this._onDataChange = this._onDataChange.bind(this);
@@ -81,7 +82,7 @@ export default class PageController {
     moviesOnList += count;
 
     return movies.slice(start, end).map((movie) => {
-      const movieController = new MovieController(this._moviesContainerComponent.getElement(), this._onDataChange, this._onViewChange);
+      const movieController = new MovieController(this._moviesContainerComponent.getElement(), this._onDataChange, this._onViewChange, this._api);
       movieController.render(movie);
       return movieController;
     });
@@ -93,7 +94,7 @@ export default class PageController {
       render(container, moviesExtraListComponents);
       const movieListContainer = moviesExtraListComponents.getElement().querySelector(`.films-list__container`);
       return movies.map((movie) => {
-        const movieController = new MovieController(movieListContainer, this._onDataChange, this._onViewChange);
+        const movieController = new MovieController(movieListContainer, this._onDataChange, this._onViewChange, this._api);
         movieController.render(movie);
         return movieController;
       });
