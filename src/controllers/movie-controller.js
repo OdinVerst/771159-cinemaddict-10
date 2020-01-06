@@ -1,6 +1,7 @@
 import FilmCard from "../components/film-card";
 import FilmDetail from "../components/film-detail";
 import {remove, render, replace} from "../utils/render";
+import Movie from "../models/movie";
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange, api) {
@@ -57,19 +58,22 @@ export default class MovieController {
   _setFilmCardControlHandlers() {
     this._filmComponent[`setWatchedButtonClickHandler`]((evt) => {
       evt.preventDefault();
-      const updateFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched, userDateWatch: new Date()});
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.isWatched = !this._film.isWatched;
       this._onDataChange(this, this._film, updateFilm);
     });
 
     this._filmComponent[`setWatchlistButtonClickHandler`]((evt) => {
       evt.preventDefault();
-      const updateFilm = Object.assign({}, this._film, {isWatchlist: !this._film.isWatchlist});
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.isWatchlist = !this._film.isWatchlist;
       this._onDataChange(this, this._film, updateFilm);
     });
 
     this._filmComponent[`setFavoriteButtonClickHandler`]((evt) => {
       evt.preventDefault();
-      const updateFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.isFavorite = !this._film.isFavorite;
       this._onDataChange(this, this._film, updateFilm);
     });
   }

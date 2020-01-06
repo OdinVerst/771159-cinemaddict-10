@@ -31,10 +31,33 @@ export default class Movie {
   }
 
   toRAW() {
-    console.error(`JUNK`);
     return {
       'id': this.id,
       'comments': this.comments || [],
+      [Sections.INFO]: {
+        'title': this.name,
+        'alternative_title': this.alternaiveName,
+        'total_rating': this.rating,
+        'poster': this.poster,
+        'age_rating': this.age,
+        'director': this.director,
+        'writers': Array.from(this.writers),
+        'actors': Array.from(this.actors),
+        'release': {
+          'date': this.relaese,
+          'release_country': this.contry
+        },
+        'runtime': this.duration,
+        'genre': Array.from(this.genre),
+        'description': this.description,
+      },
+      [Sections.USER]: {
+        'personal_rating': parseInt(this.userRating, 10) || false,
+        'watchlist': Boolean(this.isWatchlist),
+        'already_watched': Boolean(this.isWatched),
+        'watching_date': this.userDateWatch ? new Date(this.userDateWatch).toISOString() : null,
+        'favorite': Boolean(this.isFavorite)
+      }
     };
   }
 

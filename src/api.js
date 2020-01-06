@@ -29,7 +29,14 @@ export default class API {
   }
 
   updateMovie(idMove, data) {
-
+    return this._load({
+      url: `movies/${idMove}`,
+      method: Methods.PUT,
+      body: JSON.stringify(data.toRAW()),
+      headers: new Headers({'Content-Type': `application/json`})
+    })
+      .then((response) => response.json())
+      .then(Movie.parseMovie);
   }
 
   getComments(idMove) {
