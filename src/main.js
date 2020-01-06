@@ -3,7 +3,6 @@ import Movies from "./models/movies";
 import UserProfile from "./components/user-profile";
 import FilterController from "./controllers/filter-controller";
 import FooterStatistic from "./components/footer-statistic";
-import {generateFilms} from './mock/film';
 import {generateUserRating} from './utils/user-rating';
 import {render} from "./utils/render";
 import {NavigateType} from "./const";
@@ -13,22 +12,22 @@ import API from "./api";
 const AUTHORIZATION = `Basic testKey=`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
-
 const mainElement = document.querySelector(`.main`);
 const headerElement = document.querySelector(`.header`);
-
-const test = new API(AUTHORIZATION, END_POINT);
-console.log(test.getMovies());
-
-const COUNT_FILMS = 22;
-const ALL_FILMS = generateFilms(COUNT_FILMS);
+const footerElemet = document.querySelector(`.footer`);
 
 const moviesModel = new Movies();
-moviesModel.setMovies(ALL_FILMS);
+const api = new API(AUTHORIZATION, END_POINT);
 
 const pageController = new PageController(mainElement, moviesModel);
 
-render(headerElement, new UserProfile(generateUserRating(ALL_FILMS)));
+api.getMovies()
+  .then((movies) => {
+    moviesModel.setMovies(movies);
+    render(headerElement, new UserProfile(generateUserRating(movies)));
+    pageController.render();
+    render(footerElemet, new FooterStatistic(movies.length));
+  });
 
 const filterController = new FilterController(mainElement, moviesModel);
 filterController.render();
@@ -48,10 +47,3 @@ filterController.watchFilterValue((typeNavigate) => {
       break;
   }
 });
-
-pageController.render();
-
-
-const footerElemet = document.querySelector(`.footer`);
-render(footerElemet, new FooterStatistic(COUNT_FILMS));
-

@@ -17,7 +17,7 @@ export default class Movie {
     this.director = data[Sections.INFO].director;
     this.writers = new Set(data[Sections.INFO].writers);
     this.actors = new Set(data[Sections.INFO].actors);
-    this.relaese = data[Sections.INFO].release.date;
+    this.relaese = new Date(data[Sections.INFO].release.date);
     this.contry = data[Sections.INFO].release.release_country;
     this.duration = data[Sections.INFO].runtime;
     this.genre = new Set(data[Sections.INFO].genre);
@@ -31,6 +31,7 @@ export default class Movie {
   }
 
   toRAW() {
+    console.error(`JUNK`);
     return {
       'id': this.id,
       'comments': this.comments || [],

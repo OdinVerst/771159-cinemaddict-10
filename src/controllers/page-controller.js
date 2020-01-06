@@ -15,7 +15,7 @@ export default class PageController {
   constructor(container, moviesController) {
     this._container = container;
     this._moviesController = moviesController;
-    this._movies = this._moviesController.getMovies();
+    this._movies = [];
     this._showedMovieControllers = [];
 
     this._onDataChange = this._onDataChange.bind(this);
@@ -33,12 +33,11 @@ export default class PageController {
   }
 
   render() {
-
     render(this._container, this._sortComponent);
 
     render(this._container, this._moviesListComponent);
 
-    let movies = this._movies;
+    let movies = this._moviesController.getMovies();
 
     if (movies.length) {
       const movieListElement = this._container.querySelector(`.films-list`);
@@ -115,7 +114,7 @@ export default class PageController {
   }
 
   _renderLoadMoreButton(container) {
-    const movies = this._movies;
+    const movies = this._moviesController.getMovies();
     if (movies.length <= SHOWING_MOVIES_COUNT_ON_ITERATION) {
       return;
     }
@@ -140,7 +139,7 @@ export default class PageController {
 
   _onSortTypeChange(sortType) {
     let sortedMoies = [];
-    let movies = this._movies;
+    let movies = this._moviesController.getMovies();
 
     switch (sortType) {
       case SortType.DATE:
