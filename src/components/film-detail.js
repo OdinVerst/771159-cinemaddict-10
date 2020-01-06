@@ -99,6 +99,7 @@ const renderUserRatingInputs = (isWatched, userRating, name, poster) => {
 const createFilmPopupTemplate = (film, emoji, textComment) => {
   const {
     name,
+    alternaiveName,
     director,
     rating,
     userRating,
@@ -136,14 +137,14 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
           <div class="film-details__poster">
             <img class="film-details__poster-img" src="./${poster}" alt="">
 
-            <p class="film-details__age">${age}</p>
+            <p class="film-details__age">${age} +</p>
           </div>
 
           <div class="film-details__info">
             <div class="film-details__info-head">
               <div class="film-details__title-wrap">
                 <h3 class="film-details__title">${name}</h3>
-                <p class="film-details__title-original">Original: ${name}</p>
+                <p class="film-details__title-original">Original: ${alternaiveName}</p>
               </div>
 
               <div class="film-details__rating">
