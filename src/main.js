@@ -20,30 +20,29 @@ const moviesModel = new Movies();
 const api = new API(AUTHORIZATION, END_POINT);
 
 const pageController = new PageController(mainElement, moviesModel, api);
+const filterController = new FilterController(mainElement, moviesModel);
+const statisticController = new StatisticsController(mainElement, moviesModel);
 
 api.getMovies()
   .then((movies) => {
     moviesModel.setMovies(movies);
     render(headerElement, new UserProfile(generateUserRating(movies)));
+    filterController.render();
+    statisticController.render();
     pageController.render();
     render(footerElemet, new FooterStatistic(movies.length));
+
+    filterController.watchFilterValue((typeNavigate) => {
+      switch (typeNavigate) {
+        case NavigateType.FILTER:
+          statisticController.hide();
+          pageController.show();
+          break;
+        case NavigateType.STATISTIC:
+          statisticController.show();
+          pageController.hide();
+          break;
+      }
+    });
   });
 
-const filterController = new FilterController(mainElement, moviesModel);
-filterController.render();
-
-const statisticController = new StatisticsController(mainElement, moviesModel);
-statisticController.render();
-
-filterController.watchFilterValue((typeNavigate) => {
-  switch (typeNavigate) {
-    case NavigateType.FILTER:
-      statisticController.hide();
-      pageController.show();
-      break;
-    case NavigateType.STATISTIC:
-      statisticController.show();
-      pageController.hide();
-      break;
-  }
-});
