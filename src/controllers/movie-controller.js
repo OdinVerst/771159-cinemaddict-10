@@ -42,11 +42,13 @@ export default class MovieController {
 
   _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
-      this._filmDetailComponent = new FilmDetail(this._film);
-      console.log(this._film);
-      this._api.getComments(this._film.id);
-      this._filmDetailAllHandlers(this._filmDetailComponent);
-      render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
+      this._api.getComments(this._film.id).then((comments) => {
+        this._filmDetailComponent = new FilmDetail(this._film, comments);
+
+        this._filmDetailAllHandlers(this._filmDetailComponent);
+        render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
+      });
+
       this._onViewChange();
       this._filmDetialOpen = true;
     });

@@ -1,4 +1,5 @@
 import Movie from "./models/movie";
+import Comment from "./models/comment";
 
 const Methods = {
   GET: `GET`,
@@ -34,7 +35,7 @@ export default class API {
   getComments(idMove) {
     return this._load({url: `comments/${idMove}`})
     .then((response) => response.json())
-    .then((json) => console.log(json));
+    .then(Comment.parseComments);
   }
 
   deleteComment(idComment) {
