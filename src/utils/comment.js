@@ -1,11 +1,11 @@
 import he from "he";
+import nanoid from "nanoid";
 
-import {getRandomInteger} from "./common";
 import {UESR_NAME} from "../const";
 
 export const collectNewComment = (text, emoji) => {
   return {
-    id: Date.now() + getRandomInteger(1, 1000),
+    id: nanoid(),
     name: UESR_NAME,
     text: normalizeTextComment(text),
     date: new Date(),

@@ -1,14 +1,6 @@
 import moment from "moment";
 import {COUNT_TOP_MOVIES} from "../const";
 
-export const getRandomArrayElement = (array) => {
-  return array[Math.floor(Math.random() * array.length)];
-};
-
-export const getRandomInteger = (min, max) => {
-  return Math.floor(min + Math.random() * (max + 1 - min));
-};
-
 export const getCountNumber = (value) => {
   if (isNaN(Number(value)) && !Array.isArray(value)) {
     throw new Error(`Invalid type value`);

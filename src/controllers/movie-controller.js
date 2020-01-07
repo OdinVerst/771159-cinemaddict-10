@@ -106,6 +106,7 @@ export default class MovieController {
       this._onDataChange(this, this._film, updateFilm, {action: CommentsActions.DELETE, id});
     });
     component.setNewCommentSubmitHandler((newComment)=> {
+      console.log(newComment);
       const updateFilm = Object.assign({}, this._film, {comments: [...this._film.comments, newComment]});
       this._onDataChange(this, this._film, updateFilm);
       component.rerender();
