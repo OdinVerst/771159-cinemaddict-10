@@ -8,11 +8,13 @@ export default class Comment {
   }
 
   toRAW() {
-    console.error(`JUNK`);
-    // return {
-    //   'id': this.id,
-    //   'comments': this.comments || [],
-    // };
+    return {
+      'id': this.id,
+      'author': this.name,
+      'comment': this.text,
+      'emotion': this.emoji,
+      'date': this.date,
+    };
   }
 
   static parseComment(data) {

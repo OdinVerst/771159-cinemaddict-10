@@ -84,3 +84,8 @@ export const NavigateType = {
   STATISTIC: `stats`,
   FILTER: `filter`
 };
+
+export const CommentsActions = {
+  DELETE: `delete`,
+  ADD: `add`
+}

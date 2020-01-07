@@ -279,8 +279,9 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._element = element;
   }
 
-  updateFilm(film) {
+  updateFilm(film, comments) {
     this._film = film;
+    this._comments = comments;
   }
 
   rerender() {

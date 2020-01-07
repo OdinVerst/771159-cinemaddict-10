@@ -6,6 +6,7 @@ import {getSortMovies, getSortTopMovies} from "../utils/common";
 import ButtonLoadMore from "../components/button-load-more";
 import Sort, {SortType} from "../components/sort";
 import MovieController from "./movie-controller";
+import { CommentsActions } from "../const";
 
 
 const SHOWING_MOVIES_COUNT_ON_ITERATION = 5;
@@ -102,8 +103,25 @@ export default class PageController {
     return false;
   }
 
-  _onDataChange(movieController, oldData, newData) {
-    this._api.updateMovie(oldData.id, newData)
+  _onDataChange(movieController, oldData, newData, comment = false) {
+    if (comment) {
+      switch (comment.action) {
+        case CommentsActions.DELETE:
+          this._api.deleteComment(comment.id).then((response) => {
+            if (response.ok) {
+              movieController.render(newData);
+            }
+          });
+          console.log(`DELETE`);
+          break;
+        case CommentsActions.ADD:
+          console.log(`ADD`);
+          break;
+        default:
+          return;
+      }
+    } else {
+      this._api.updateMovie(oldData.id, newData)
       .then((movie) => {
         const isSuccess = this._moviesController.updateMovie(oldData.id, movie);
 
@@ -111,6 +129,7 @@ export default class PageController {
           movieController.render(movie);
         }
       });
+    }
   }
 
   _onViewChange() {

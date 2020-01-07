@@ -2,6 +2,7 @@ import FilmCard from "../components/film-card";
 import FilmDetail from "../components/film-detail";
 import {remove, render, replace} from "../utils/render";
 import Movie from "../models/movie";
+import { CommentsActions } from "../const";
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange, api) {
@@ -31,7 +32,10 @@ export default class MovieController {
     this._setFilmCardClickHandler();
 
     if (oldFilmDetailComponent) {
-      oldFilmDetailComponent.updateFilm(movie);
+      this._api.getComments(this._film.id).then((comments) => {
+        oldFilmDetailComponent.updateFilm(movie, comments);
+        oldFilmDetailComponent.rerender();
+      });
     }
 
     if (oldFilmComponent) {
@@ -81,22 +85,25 @@ export default class MovieController {
   _filmDetailAllHandlers(component) {
     this._existFilmDetailHandler = true;
     component.setWatchedButtonClickHandler(() => {
-      const updateFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched, userDateWatch: new Date()});
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.isWatched = !this._film.isWatched;
+      updateFilm.userDateWatch = new Date();
       this._onDataChange(this, this._film, updateFilm);
-      component.rerender();
     });
     component.setWatchlistButtonClickHandler(() => {
-      const updateFilm = Object.assign({}, this._film, {isWatchlist: !this._film.isWatchlist});
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.isWatchlist = !this._film.isWatchlist;
       this._onDataChange(this, this._film, updateFilm);
     });
     component.setFavoriteButtonClickHandler(() => {
-      const updateFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.isFavorite = !this._film.isFavorite;
       this._onDataChange(this, this._film, updateFilm);
     });
     component.setDeleteButtonClickHandler((id)=> {
-      const updateFilm = Object.assign({}, this._film, {comments: this._film.comments.filter((comment) =>comment.id !== Number(id))});
-      this._onDataChange(this, this._film, updateFilm);
-      component.rerender();
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.comments = updateFilm.comments.filter((comment) => Number(comment) !== Number(id));
+      this._onDataChange(this, this._film, updateFilm, {action: CommentsActions.DELETE, id});
     });
     component.setNewCommentSubmitHandler((newComment)=> {
       const updateFilm = Object.assign({}, this._film, {comments: [...this._film.comments, newComment]});

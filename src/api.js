@@ -46,7 +46,11 @@ export default class API {
   }
 
   deleteComment(idComment) {
-
+    return this._load({
+      url: `comments/${idComment}`,
+      method: Methods.DELETE,
+    })
+    .then((response) => response);
   }
 
   addNewComment(data) {
