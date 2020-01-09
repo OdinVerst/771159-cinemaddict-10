@@ -37,6 +37,11 @@ export default class Sort extends AbstractComponent {
     });
   }
 
+  resetActiveSortItem() {
+    this._currenSortType = SortType.DEFAULT;
+    this._changeActiveSortItem(SortType.DEFAULT);
+  }
+
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();

@@ -195,6 +195,7 @@ export default class PageController {
   }
 
   _onFilterChange() {
+    this._sortComponent.resetActiveSortItem();
     this._removeMovies();
     this._movies = this._moviesController.getMovies();
     this._renderMovies(this._moviesController.getMovies(), SHOWING_MOVIES_COUNT_ON_ITERATION);
