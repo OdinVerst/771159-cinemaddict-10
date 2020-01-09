@@ -53,8 +53,15 @@ export default class API {
     .then((response) => response);
   }
 
-  addNewComment(data) {
-
+  addNewComment(idMove, data) {
+    return this._load({
+      url: `comments/${idMove}`,
+      method: Methods.POST,
+      body: JSON.stringify(data.toRAW()),
+      headers: new Headers({'Content-Type': `application/json`})
+    })
+      .then((response) => response.json())
+      .then((parseData)=> Movie.parseMovie(parseData.movie));
   }
 
   _load({url, method = Methods.GET, body = null, headers = new Headers()}) {

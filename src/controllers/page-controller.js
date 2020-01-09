@@ -6,7 +6,7 @@ import {getSortMovies, getSortTopMovies} from "../utils/common";
 import ButtonLoadMore from "../components/button-load-more";
 import Sort, {SortType} from "../components/sort";
 import MovieController from "./movie-controller";
-import { CommentsActions } from "../const";
+import {CommentsActions} from "../const";
 
 
 const SHOWING_MOVIES_COUNT_ON_ITERATION = 5;
@@ -112,10 +112,11 @@ export default class PageController {
               movieController.render(newData);
             }
           });
-          console.log(`DELETE`);
           break;
         case CommentsActions.ADD:
-          console.log(`ADD`);
+          this._api.addNewComment(comment.id, comment.comment).then((response) => {
+            movieController.render(response);
+          });
           break;
         default:
           return;

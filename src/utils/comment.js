@@ -7,9 +7,9 @@ export const collectNewComment = (text, emoji) => {
   return {
     id: nanoid(),
     name: UESR_NAME,
-    text: normalizeTextComment(text),
+    comment: normalizeTextComment(text),
     date: new Date(),
-    emoji
+    emotion: emoji
   };
 };
 

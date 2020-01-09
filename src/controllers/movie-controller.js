@@ -2,7 +2,8 @@ import FilmCard from "../components/film-card";
 import FilmDetail from "../components/film-detail";
 import {remove, render, replace} from "../utils/render";
 import Movie from "../models/movie";
-import { CommentsActions } from "../const";
+import {CommentsActions} from "../const";
+import Comment from "../models/comment";
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange, api) {
@@ -11,6 +12,7 @@ export default class MovieController {
     this._onViewChange = onViewChange;
 
     this._film = null;
+    this._comments = null;
     this._filmComponent = null;
     this._filmDetailComponent = null;
     this._filmDetialOpen = false;
@@ -33,7 +35,8 @@ export default class MovieController {
 
     if (oldFilmDetailComponent) {
       this._api.getComments(this._film.id).then((comments) => {
-        oldFilmDetailComponent.updateFilm(movie, comments);
+        this._comments = comments;
+        oldFilmDetailComponent.updateFilm(this._film, this._comments);
         oldFilmDetailComponent.rerender();
       });
     }
@@ -48,7 +51,8 @@ export default class MovieController {
   _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
       this._api.getComments(this._film.id).then((comments) => {
-        this._filmDetailComponent = new FilmDetail(this._film, comments);
+        this._comments = comments;
+        this._filmDetailComponent = new FilmDetail(this._film, this._comments);
 
         this._filmDetailAllHandlers(this._filmDetailComponent);
         render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
@@ -106,10 +110,8 @@ export default class MovieController {
       this._onDataChange(this, this._film, updateFilm, {action: CommentsActions.DELETE, id});
     });
     component.setNewCommentSubmitHandler((newComment)=> {
-      console.log(newComment);
-      const updateFilm = Object.assign({}, this._film, {comments: [...this._film.comments, newComment]});
-      this._onDataChange(this, this._film, updateFilm);
-      component.rerender();
+      const updateFilm = Movie.clone(this._film);
+      this._onDataChange(this, this._film, updateFilm, {action: CommentsActions.ADD, id: this._film.id, comment: Comment.parseComment(newComment)});
     });
     component.setCloseHandler(this._removeFilmDetail);
     document.addEventListener(`keydown`, this._checkEscKeyDown);
