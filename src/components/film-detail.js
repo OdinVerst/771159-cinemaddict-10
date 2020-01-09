@@ -1,7 +1,7 @@
 import moment from "moment";
 import {MIN_RATING, MAX_RATING} from "../const";
 import AbstractSmartComponent from "./abstract-smart-component";
-import {collectNewComment} from "../utils/comment";
+import {collectNewComment, normalizeTextComment} from "../utils/comment";
 import {parseDuration} from "../utils/common";
 
 const createCommentsMarkup = (comments) => {
@@ -21,7 +21,7 @@ const createCommentsMarkup = (comments) => {
           <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${text}</p>
+          <p class="film-details__comment-text">${normalizeTextComment(text)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${formatDate(date)}</span>
@@ -96,9 +96,10 @@ const renderUserRatingInputs = (isWatched, userRating, name, poster) => {
   </section>`;
 };
 
-const createFilmPopupTemplate = (film, emoji, textComment) => {
+const createFilmPopupTemplate = (film, comments, emoji, textComment) => {
   const {
     name,
+    alternaiveName,
     director,
     rating,
     userRating,
@@ -111,7 +112,6 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
     isFavorite,
     isWatched,
     isWatchlist,
-    comments,
     contry,
     writers,
     actors
@@ -136,14 +136,14 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
           <div class="film-details__poster">
             <img class="film-details__poster-img" src="./${poster}" alt="">
 
-            <p class="film-details__age">${age}</p>
+            <p class="film-details__age">${age} +</p>
           </div>
 
           <div class="film-details__info">
             <div class="film-details__info-head">
               <div class="film-details__title-wrap">
                 <h3 class="film-details__title">${name}</h3>
-                <p class="film-details__title-original">Original: ${name}</p>
+                <p class="film-details__title-original">Original: ${alternaiveName}</p>
               </div>
 
               <div class="film-details__rating">
@@ -248,9 +248,10 @@ const createFilmPopupTemplate = (film, emoji, textComment) => {
 };
 
 export default class FilmDetail extends AbstractSmartComponent {
-  constructor(film) {
+  constructor(film, comments) {
     super();
     this._film = film;
+    this._comments = comments;
     this._emojiName = null;
     this._emojiURL = null;
     this._textComment = null;
@@ -267,7 +268,7 @@ export default class FilmDetail extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film, this._emojiURL, this._textComment);
+    return createFilmPopupTemplate(this._film, this._comments, this._emojiURL, this._textComment);
   }
 
   getContainer() {
@@ -278,8 +279,9 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._element = element;
   }
 
-  updateFilm(film) {
+  updateFilm(film, comments) {
     this._film = film;
+    this._comments = comments;
   }
 
   rerender() {
@@ -328,6 +330,7 @@ export default class FilmDetail extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, (evt) => {
       if (evt.key === `Enter` && evt.metaKey && this._textComment && this._emojiName) {
         const newComment = (collectNewComment(this._textComment, this._emojiName));
+        this.getElement().querySelector(`.film-details__comment-input`).value = ``;
         this.reset();
         this._newCommentSubmitHandler(newComment);
       }

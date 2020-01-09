@@ -11,7 +11,7 @@ const cropDescription = (text) => {
 
 const getFirstGenre = (set) => {
   let iterator = set.values();
-  return iterator.next().value;
+  return iterator.next().value || ``;
 };
 
 const createFilmCardTemplate = (film) => {
