@@ -116,6 +116,9 @@ export default class PageController {
         case CommentsActions.ADD:
           this._api.addNewComment(comment.id, comment.comment).then((response) => {
             movieController.render(response);
+          })
+          .catch(() => {
+            movieController.shake();
           });
           break;
         default:

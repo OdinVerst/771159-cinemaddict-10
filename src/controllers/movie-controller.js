@@ -5,6 +5,8 @@ import Movie from "../models/movie";
 import {CommentsActions} from "../const";
 import Comment from "../models/comment";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export default class MovieController {
   constructor(container, onDataChange, onViewChange, api) {
     this._container = container;
@@ -18,6 +20,8 @@ export default class MovieController {
     this._filmDetialOpen = false;
     this._existFilmDetailHandler = false;
     this._api = api;
+
+    this._errorComment = false;
 
     this._checkEscKeyDown = this._checkEscKeyDown.bind(this);
     this._removeFilmDetail = this._removeFilmDetail.bind(this);
@@ -39,6 +43,9 @@ export default class MovieController {
         oldFilmDetailComponent.updateFilm(this._film, this._comments);
         oldFilmDetailComponent.rerender();
       });
+      if (!this._errorComment) {
+        oldFilmDetailComponent.reset();
+      }
     }
 
     if (oldFilmComponent) {
@@ -138,6 +145,17 @@ export default class MovieController {
     if (this._filmDetialOpen) {
       this._removeFilmDetail();
     }
+  }
+
+  shake() {
+    this._errorComment = true;
+    this._filmDetailComponent.getElementCommentFilm().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._filmDetailComponent.getElementCommentFilm().style.border = `2px solid red`;
+
+    setTimeout(() => {
+      this._filmDetailComponent.getElementCommentFilm().style.animation = ``;
+      this._filmDetailComponent.getElementCommentFilm().style.border = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _checkEscKeyDown(evt) {

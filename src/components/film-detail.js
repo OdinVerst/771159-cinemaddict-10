@@ -281,6 +281,10 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._element = element;
   }
 
+  getElementCommentFilm() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
+  }
+
   updateFilm(film, comments) {
     this._film = film;
     this._comments = comments;
@@ -332,8 +336,6 @@ export default class FilmDetail extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, (evt) => {
       if (evt.key === `Enter` && evt.metaKey && this._textComment && this._emojiName) {
         const newComment = (collectNewComment(this._textComment, this._emojiName));
-        this.getElement().querySelector(`.film-details__comment-input`).value = ``;
-        this.reset();
         this._newCommentSubmitHandler(newComment);
       }
     });
@@ -366,6 +368,7 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._textComment = null;
     this._emojiName = null;
     this._emojiURL = null;
+    this.getElement().querySelector(`.film-details__comment-input`).value = ``;
   }
 
   recoveryListeners() {
