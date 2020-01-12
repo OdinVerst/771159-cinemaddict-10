@@ -255,6 +255,7 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._emojiName = null;
     this._emojiURL = null;
     this._textComment = null;
+    this._isDisabled = false;
 
     this._closeButtonClickHandler = null;
     this._watchlistButtonClickHandler = null;
@@ -299,6 +300,10 @@ export default class FilmDetail extends AbstractSmartComponent {
     this.recoveryListeners();
   }
 
+  clearDisable() {
+    this._isDisabled = false;
+  }
+
   setCloseHandler(handler) {
     this._closeButtonClickHandler = handler;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeButtonClickHandler);
@@ -334,8 +339,9 @@ export default class FilmDetail extends AbstractSmartComponent {
   setNewCommentSubmitHandler(handler) {
     this._newCommentSubmitHandler = handler;
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, (evt) => {
-      if (evt.key === `Enter` && evt.metaKey && this._textComment && this._emojiName) {
+      if (evt.key === `Enter` && evt.metaKey && this._textComment && this._emojiName && !this._isDisabled) {
         const newComment = (collectNewComment(this._textComment, this._emojiName));
+        this._isDisabled = true;
         this._newCommentSubmitHandler(newComment);
       }
     });
@@ -390,14 +396,18 @@ export default class FilmDetail extends AbstractSmartComponent {
     const textCommentElement = element.querySelector(`.film-details__comment-input`);
 
     emojiElement.addEventListener(`change`, (evt) => {
-      const valueEmojiID = evt.target.getAttribute(`id`);
-      this._emojiName = evt.target.value;
-      this._emojiURL = element.querySelector(`label[for="${valueEmojiID}"] img`).getAttribute(`src`);
-      this.rerender();
+      if (!this._isDisabled) {
+        const valueEmojiID = evt.target.getAttribute(`id`);
+        this._emojiName = evt.target.value;
+        this._emojiURL = element.querySelector(`label[for="${valueEmojiID}"] img`).getAttribute(`src`);
+        this.rerender();
+      }
     });
 
     textCommentElement.addEventListener(`keydown`, (evt) => {
-      this._textComment = evt.target.value;
+      if (!this._isDisabled) {
+        this._textComment = evt.target.value;
+      }
     });
   }
 }

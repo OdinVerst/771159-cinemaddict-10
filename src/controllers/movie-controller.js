@@ -38,6 +38,8 @@ export default class MovieController {
     this._setFilmCardClickHandler();
 
     if (oldFilmDetailComponent) {
+      oldFilmDetailComponent.clearDisable();
+
       this._api.getComments(this._film.id).then((comments) => {
         this._comments = comments;
         oldFilmDetailComponent.updateFilm(this._film, this._comments);
