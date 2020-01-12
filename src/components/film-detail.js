@@ -263,6 +263,7 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._deleteButtonClickHandler = null;
     this._newCommentSubmitHandler = null;
     this._userRatingHandler = null;
+    this._resetWatchedHandler = null;
 
     this._container = document.querySelector(`body`);
     this._subscribeOnEvents();
@@ -338,15 +339,24 @@ export default class FilmDetail extends AbstractSmartComponent {
     });
   }
 
-  setRatingHandler(handler) {
+  setUserRatingHandler(handler) {
     this._userRatingHandler = handler;
     const ratingElement = this.getElement().querySelector(`.film-details__user-rating-score`);
     if (ratingElement) {
       ratingElement.addEventListener(`change`, (evt) => {
         const valueRating = evt.target.value;
         this._film.userRating = valueRating;
-
         handler(valueRating);
+      });
+    }
+  }
+
+  resetWatchingHandler(handler) {
+    this._resetWatchedHandler = handler;
+    const resetWatchedElement = this.getElement().querySelector(`.film-details__watched-reset`);
+    if (resetWatchedElement) {
+      resetWatchedElement.addEventListener(`click`, () => {
+        handler(false);
       });
     }
   }
@@ -364,24 +374,16 @@ export default class FilmDetail extends AbstractSmartComponent {
     this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
     this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
     this.setNewCommentSubmitHandler(this._newCommentSubmitHandler);
-    this.setRatingHandler(this._userRatingHandler);
+    this.setUserRatingHandler(this._userRatingHandler);
+    this.resetWatchingHandler(this._resetWatchedHandler);
 
     this._subscribeOnEvents();
   }
 
   _subscribeOnEvents() {
     const element = this.getElement();
-    const resetWatchedElement = element.querySelector(`.film-details__watched-reset`);
     const emojiElement = element.querySelector(`.film-details__emoji-list`);
     const textCommentElement = element.querySelector(`.film-details__comment-input`);
-
-    if (resetWatchedElement) {
-      resetWatchedElement.addEventListener(`click`, () => {
-        this._film.isWatched = !this._film.isWatched;
-        this._film.userRating = false;
-        this.rerender();
-      });
-    }
 
     emojiElement.addEventListener(`change`, (evt) => {
       const valueEmojiID = evt.target.getAttribute(`id`);

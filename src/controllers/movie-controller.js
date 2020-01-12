@@ -113,9 +113,14 @@ export default class MovieController {
       const updateFilm = Movie.clone(this._film);
       this._onDataChange(this, this._film, updateFilm, {action: CommentsActions.ADD, id: this._film.id, comment: Comment.parseComment(newComment)});
     });
-    component.setRatingHandler((rating) => {
+    component.setUserRatingHandler((rating) => {
       const updateFilm = Movie.clone(this._film);
       updateFilm.userRating = rating;
+      this._onDataChange(this, this._film, updateFilm);
+    });
+    component.resetWatchingHandler((isWatched)=> {
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.isWatched = isWatched;
       this._onDataChange(this, this._film, updateFilm);
     });
     component.setCloseHandler(this._removeFilmDetail);
