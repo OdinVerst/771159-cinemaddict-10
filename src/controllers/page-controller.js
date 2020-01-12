@@ -111,6 +111,9 @@ export default class PageController {
             if (response.ok) {
               movieController.render(newData);
             }
+          })
+          .catch(() => {
+            movieController.shake();
           });
           break;
         case CommentsActions.ADD:
@@ -132,6 +135,9 @@ export default class PageController {
         if (isSuccess) {
           movieController.render(movie);
         }
+      })
+      .catch(() => {
+        movieController.shake();
       });
     }
   }

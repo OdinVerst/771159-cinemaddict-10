@@ -265,6 +265,8 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._newCommentSubmitHandler = null;
     this._userRatingHandler = null;
     this._resetWatchedHandler = null;
+    this._shakeElement = null;
+    this._shakeElementStyle = null;
 
     this._container = document.querySelector(`body`);
     this._subscribeOnEvents();
@@ -282,8 +284,14 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._element = element;
   }
 
-  getElementCommentFilm() {
-    return this.getElement().querySelector(`.film-details__comment-input`);
+  getElementShake() {
+    if (!this._shakeElement) {
+      return false;
+    }
+    return {
+      element: this._shakeElement,
+      style: this._shakeElementStyle
+    };
   }
 
   updateFilm(film, comments) {
@@ -330,6 +338,8 @@ export default class FilmDetail extends AbstractSmartComponent {
     [...deleteButtons].forEach((button) => {
       button.addEventListener(`click`, (evt) => {
         evt.preventDefault();
+        this._shakeElement = button;
+        this._shakeElementStyle = null;
         const id = evt.currentTarget.getAttribute(`data-id`);
         this._deleteButtonClickHandler(id);
       });
@@ -340,6 +350,8 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._newCommentSubmitHandler = handler;
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, (evt) => {
       if (evt.key === `Enter` && evt.metaKey && this._textComment && this._emojiName && !this._isDisabled) {
+        this._shakeElement = this.getElement().querySelector(`.film-details__comment-input`);
+        this._shakeElementStyle = {name: `border`, value: `2px solid red`};
         const newComment = (collectNewComment(this._textComment, this._emojiName));
         this._isDisabled = true;
         this._newCommentSubmitHandler(newComment);
@@ -350,10 +362,16 @@ export default class FilmDetail extends AbstractSmartComponent {
   setUserRatingHandler(handler) {
     this._userRatingHandler = handler;
     const ratingElement = this.getElement().querySelector(`.film-details__user-rating-score`);
-    if (ratingElement) {
+    if (ratingElement && !this._isDisabled) {
       ratingElement.addEventListener(`change`, (evt) => {
+        if (this._isDisabled) {
+          return;
+        }
+        this._shakeElement = this.getElement().querySelector(`label[for="${evt.target.id}"]`);
+        this._shakeElementStyle = {name: `background`, value: `red`};
         const valueRating = evt.target.value;
         this._film.userRating = valueRating;
+        this._isDisabled = true;
         handler(valueRating);
       });
     }

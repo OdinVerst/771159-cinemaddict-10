@@ -151,13 +151,21 @@ export default class MovieController {
 
   shake() {
     this._errorComment = true;
-    this._filmDetailComponent.getElementCommentFilm().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-    this._filmDetailComponent.getElementCommentFilm().style.border = `2px solid red`;
+    if (this._filmDetailComponent.getElementShake()) {
+      const {element, style} = this._filmDetailComponent.getElementShake();
+      element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+      if (style) {
+        element.style[style.name] = style.value;
+      }
+      this._filmDetailComponent.clearDisable();
 
-    setTimeout(() => {
-      this._filmDetailComponent.getElementCommentFilm().style.animation = ``;
-      this._filmDetailComponent.getElementCommentFilm().style.border = ``;
-    }, SHAKE_ANIMATION_TIMEOUT);
+      setTimeout(() => {
+        element.style.animation = ``;
+        if (style) {
+          element.style[style.name] = ``;
+        }
+      }, SHAKE_ANIMATION_TIMEOUT);
+    }
   }
 
   _checkEscKeyDown(evt) {
