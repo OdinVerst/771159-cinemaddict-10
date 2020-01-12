@@ -5,6 +5,8 @@ import Movie from "../models/movie";
 import {CommentsActions} from "../const";
 import Comment from "../models/comment";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export default class MovieController {
   constructor(container, onDataChange, onViewChange, api) {
     this._container = container;
@@ -18,6 +20,8 @@ export default class MovieController {
     this._filmDetialOpen = false;
     this._existFilmDetailHandler = false;
     this._api = api;
+
+    this._errorComment = false;
 
     this._checkEscKeyDown = this._checkEscKeyDown.bind(this);
     this._removeFilmDetail = this._removeFilmDetail.bind(this);
@@ -34,11 +38,16 @@ export default class MovieController {
     this._setFilmCardClickHandler();
 
     if (oldFilmDetailComponent) {
+      oldFilmDetailComponent.clearDisable();
+
       this._api.getComments(this._film.id).then((comments) => {
         this._comments = comments;
         oldFilmDetailComponent.updateFilm(this._film, this._comments);
         oldFilmDetailComponent.rerender();
       });
+      if (!this._errorComment) {
+        oldFilmDetailComponent.reset();
+      }
     }
 
     if (oldFilmComponent) {
@@ -113,6 +122,16 @@ export default class MovieController {
       const updateFilm = Movie.clone(this._film);
       this._onDataChange(this, this._film, updateFilm, {action: CommentsActions.ADD, id: this._film.id, comment: Comment.parseComment(newComment)});
     });
+    component.setUserRatingHandler((rating) => {
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.userRating = rating;
+      this._onDataChange(this, this._film, updateFilm);
+    });
+    component.resetWatchingHandler((isWatched)=> {
+      const updateFilm = Movie.clone(this._film);
+      updateFilm.isWatched = isWatched;
+      this._onDataChange(this, this._film, updateFilm);
+    });
     component.setCloseHandler(this._removeFilmDetail);
     document.addEventListener(`keydown`, this._checkEscKeyDown);
   }
@@ -127,6 +146,25 @@ export default class MovieController {
   setDefaultView() {
     if (this._filmDetialOpen) {
       this._removeFilmDetail();
+    }
+  }
+
+  shake() {
+    this._errorComment = true;
+    if (this._filmDetailComponent.getElementShake()) {
+      const {element, style} = this._filmDetailComponent.getElementShake();
+      element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+      if (style) {
+        element.style[style.name] = style.value;
+      }
+      this._filmDetailComponent.clearDisable();
+
+      setTimeout(() => {
+        element.style.animation = ``;
+        if (style) {
+          element.style[style.name] = ``;
+        }
+      }, SHAKE_ANIMATION_TIMEOUT);
     }
   }
 

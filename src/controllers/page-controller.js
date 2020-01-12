@@ -111,11 +111,17 @@ export default class PageController {
             if (response.ok) {
               movieController.render(newData);
             }
+          })
+          .catch(() => {
+            movieController.shake();
           });
           break;
         case CommentsActions.ADD:
           this._api.addNewComment(comment.id, comment.comment).then((response) => {
             movieController.render(response);
+          })
+          .catch(() => {
+            movieController.shake();
           });
           break;
         default:
@@ -129,6 +135,9 @@ export default class PageController {
         if (isSuccess) {
           movieController.render(movie);
         }
+      })
+      .catch(() => {
+        movieController.shake();
       });
     }
   }
@@ -195,6 +204,7 @@ export default class PageController {
   }
 
   _onFilterChange() {
+    this._sortComponent.resetActiveSortItem();
     this._removeMovies();
     this._movies = this._moviesController.getMovies();
     this._renderMovies(this._moviesController.getMovies(), SHOWING_MOVIES_COUNT_ON_ITERATION);
