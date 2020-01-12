@@ -49,8 +49,8 @@ const createGenreMarkup = (genres) => {
     .join(`\n`);
 };
 
-const renderUserRatingValue = (value) => {
-  if (!value) {
+const renderUserRatingValue = (value, isWatched) => {
+  if (!isWatched) {
     return ``;
   }
   return `<p class="film-details__user-rating">Your rate ${value}</p>`;
@@ -148,7 +148,7 @@ const createFilmPopupTemplate = (film, comments, emoji, textComment) => {
 
               <div class="film-details__rating">
                 <p class="film-details__total-rating">${rating}</p>
-                ${renderUserRatingValue(userRating)}
+                ${renderUserRatingValue(userRating, isWatched)}
               </div>
             </div>
 
@@ -356,7 +356,8 @@ export default class FilmDetail extends AbstractSmartComponent {
     const resetWatchedElement = this.getElement().querySelector(`.film-details__watched-reset`);
     if (resetWatchedElement) {
       resetWatchedElement.addEventListener(`click`, () => {
-        handler(false);
+        this._film.isWatched = false;
+        handler(this._film.isWatched);
       });
     }
   }
