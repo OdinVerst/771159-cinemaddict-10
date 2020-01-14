@@ -46,8 +46,8 @@ export default class PageController {
       const moviesContainer = this._moviesContainerComponent;
 
       render(movieListElement, moviesContainer);
-      const newMovie = this._renderMovies(movies, moviesOnList);
-      this._showedMovieControllers = this._showedMovieControllers.concat(newMovie);
+      const newMovies = this._renderMovies(movies, moviesOnList);
+      this._showedMovieControllers = this._showedMovieControllers.concat(newMovies);
       this._renderLoadMoreButton(movieListElement);
 
       const extraMoviesContainer = document.querySelector(`.films`);

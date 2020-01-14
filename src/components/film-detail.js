@@ -341,7 +341,11 @@ export default class FilmDetail extends AbstractSmartComponent {
         this._shakeElement = button;
         this._shakeElementStyle = null;
         const id = evt.currentTarget.getAttribute(`data-id`);
-        this._deleteButtonClickHandler(id);
+
+        if (!this._isDisabled) {
+          this._isDisabled = true;
+          this._deleteButtonClickHandler(id);
+        }
       });
     });
   }
