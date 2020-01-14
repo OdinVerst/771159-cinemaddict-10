@@ -1,7 +1,7 @@
 import moment from "moment";
 import {MIN_RATING, MAX_RATING} from "../const";
 import AbstractSmartComponent from "./abstract-smart-component";
-import {collectNewComment, normalizeTextComment} from "../utils/comment";
+import {collectNewComment, cropComment} from "../utils/comment";
 import {parseDuration} from "../utils/common";
 
 const createCommentsMarkup = (comments) => {
@@ -21,7 +21,7 @@ const createCommentsMarkup = (comments) => {
           <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${normalizeTextComment(text)}</p>
+          <p class="film-details__comment-text">${cropComment(text)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${formatDate(date)}</span>
