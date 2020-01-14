@@ -10,7 +10,7 @@ export default class Movie {
     this.comments = data[`comments`] || [];
 
     this.name = data[Sections.INFO].title;
-    this.alternaiveName = data[Sections.INFO].alternative_title;
+    this.alternativeName = data[Sections.INFO].alternative_title;
     this.rating = data[Sections.INFO].total_rating;
     this.poster = data[Sections.INFO].poster;
     this.age = data[Sections.INFO].age_rating;
@@ -36,7 +36,7 @@ export default class Movie {
       'comments': this.comments || [],
       [Sections.INFO]: {
         'title': this.name,
-        'alternative_title': this.alternaiveName,
+        'alternative_title': this.alternativeName,
         'total_rating': this.rating,
         'poster': this.poster,
         'age_rating': this.age,
