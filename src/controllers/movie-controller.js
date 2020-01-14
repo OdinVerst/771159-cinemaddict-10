@@ -22,6 +22,7 @@ export default class MovieController {
     this._api = api;
 
     this._errorComment = false;
+    this._loading = false;
 
     this._checkEscKeyDown = this._checkEscKeyDown.bind(this);
     this._removeFilmDetail = this._removeFilmDetail.bind(this);
@@ -59,16 +60,20 @@ export default class MovieController {
 
   _setFilmCardClickHandler() {
     this._filmComponent.setShowDetailsHandler(() => {
-      this._api.getComments(this._film.id).then((comments) => {
-        this._comments = comments;
-        this._filmDetailComponent = new FilmDetail(this._film, this._comments);
+      if (!this._loading) {
+        this._loading = true;
+        this._api.getComments(this._film.id).then((comments) => {
+          this._loading = false;
+          this._comments = comments;
+          this._filmDetailComponent = new FilmDetail(this._film, this._comments);
 
-        this._filmDetailAllHandlers(this._filmDetailComponent);
-        render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
-      });
+          this._filmDetailAllHandlers(this._filmDetailComponent);
+          render(this._filmDetailComponent.getContainer(), this._filmDetailComponent);
+        });
 
-      this._onViewChange();
-      this._filmDetialOpen = true;
+        this._onViewChange();
+        this._filmDetialOpen = true;
+      }
     });
   }
 
