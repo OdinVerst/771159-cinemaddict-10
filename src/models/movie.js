@@ -55,7 +55,7 @@ export default class Movie {
         'personal_rating': parseInt(this.userRating, 10) || false,
         'watchlist': Boolean(this.isWatchlist),
         'already_watched': Boolean(this.isWatched),
-        'watching_date': this.userDateWatch ? new Date(this.userDateWatch).toISOString() : null,
+        'watching_date': this.userDateWatch ? new Date(this.userDateWatch).toISOString() : new Date().toISOString(),
         'favorite': Boolean(this.isFavorite)
       }
     };
