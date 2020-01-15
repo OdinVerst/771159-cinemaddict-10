@@ -1,4 +1,9 @@
-export const UserRating = [`Junior`, `Proffsessional`, `Movie Buff`];
+export const UserRating = [
+  {count: 0, value: ``},
+  {count: 10, value: `Novice`},
+  {count: 20, value: `Fan`},
+  {count: Infinity, value: `Movie buff`},
+];
 
 export const COUNT_TOP_MOVIES = 2;
 export const MIN_RATING = 1;
