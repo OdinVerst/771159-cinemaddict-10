@@ -157,7 +157,7 @@ export default class MovieController {
   shake() {
     this._errorComment = true;
     if (this._filmDetailComponent.getElementShake()) {
-      const {element, style} = this._filmDetailComponent.getElementShake();
+      const {element, style, text} = this._filmDetailComponent.getElementShake();
       element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
       if (style) {
         element.style[style.name] = style.value;
@@ -168,6 +168,9 @@ export default class MovieController {
         element.style.animation = ``;
         if (style) {
           element.style[style.name] = ``;
+        }
+        if (text) {
+          element.textContent = text;
         }
       }, SHAKE_ANIMATION_TIMEOUT);
     }

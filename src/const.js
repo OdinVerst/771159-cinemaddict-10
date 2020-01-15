@@ -35,3 +35,10 @@ export const CommentsActions = {
   DELETE: `delete`,
   ADD: `add`
 };
+
+export const ValuesControls = {
+  DELETE: {
+    DEFAULT: `Delete`,
+    ACTOINS: `Deleting...`
+  }
+};

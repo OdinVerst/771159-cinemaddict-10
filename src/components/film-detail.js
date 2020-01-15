@@ -1,5 +1,5 @@
 import moment from "moment";
-import {MIN_RATING, MAX_RATING} from "../const";
+import {MIN_RATING, MAX_RATING, ValuesControls} from "../const";
 import AbstractSmartComponent from "./abstract-smart-component";
 import {collectNewComment, cropComment} from "../utils/comment";
 import {parseDuration} from "../utils/common";
@@ -25,7 +25,7 @@ const createCommentsMarkup = (comments) => {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${formatDate(date)}</span>
-            <button data-id="${id}" class="film-details__comment-delete">Delete</button>
+            <button data-id="${id}" class="film-details__comment-delete">${ValuesControls.DELETE.DEFAULT}</button>
           </p>
         </div>
       </li>`;
@@ -267,6 +267,7 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._resetWatchedHandler = null;
     this._shakeElement = null;
     this._shakeElementStyle = null;
+    this._shakeElementText = null;
 
     this._container = document.querySelector(`body`);
     this._subscribeOnEvents();
@@ -290,7 +291,8 @@ export default class FilmDetail extends AbstractSmartComponent {
     }
     return {
       element: this._shakeElement,
-      style: this._shakeElementStyle
+      style: this._shakeElementStyle,
+      text: this._shakeElementText
     };
   }
 
@@ -340,7 +342,9 @@ export default class FilmDetail extends AbstractSmartComponent {
         evt.preventDefault();
         this._shakeElement = button;
         this._shakeElementStyle = null;
+        this._shakeElementText = ValuesControls.DELETE.DEFAULT;
         const id = evt.currentTarget.getAttribute(`data-id`);
+        button.textContent = ValuesControls.DELETE.ACTOINS;
 
         if (!this._isDisabled) {
           this._isDisabled = true;
