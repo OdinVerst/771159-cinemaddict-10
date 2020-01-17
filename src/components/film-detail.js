@@ -1,8 +1,8 @@
 import moment from "moment";
-import {MIN_RATING, MAX_RATING, ValuesControls} from "../const";
+import {Ratings, ValuesControls} from "../const";
 import AbstractSmartComponent from "./abstract-smart-component";
-import {collectNewComment, cropComment} from "../utils/comment";
-import {parseDuration} from "../utils/common";
+import {collectNewComment} from "../utils/comment";
+import {parseDuration, cropText} from "../utils/common";
 
 const createCommentsMarkup = (comments) => {
   return comments
@@ -21,7 +21,7 @@ const createCommentsMarkup = (comments) => {
           <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${cropComment(text)}</p>
+        <p class="film-details__comment-text">${cropText(text)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${formatDate(date)}</span>
@@ -89,7 +89,7 @@ const renderUserRatingInputs = (isWatched, userRating, name, poster) => {
         <p class="film-details__user-rating-feelings">How you feel it?</p>
 
         <div class="film-details__user-rating-score">
-          ${renderRtingInput(MIN_RATING, MAX_RATING)}
+          ${renderRtingInput(Ratings.MIN, Ratings.MAX)}
         </div>
       </section>
     </div>

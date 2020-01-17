@@ -1,12 +1,8 @@
 import AbstractComponent from "./abstract-component";
-import {parseDuration} from "../utils/common";
+import {parseDuration, cropText} from "../utils/common";
 
 const isActive = (prop) => {
   return prop ? `film-card__controls-item--active` : ``;
-};
-
-const cropDescription = (text) => {
-  return text.substring(0, 140) + `...`;
 };
 
 const getFirstGenre = (set) => {
@@ -28,7 +24,7 @@ const createFilmCardTemplate = (film) => {
       <span class="film-card__genre">${mainGenre}</span>
     </p>
     <img src="./${poster}" alt="" class="film-card__poster">
-    <p class="film-card__description">${cropDescription(description)}</p>
+    <p class="film-card__description">${cropText(description)}</p>
     <a class="film-card__comments">${commentsCount} comments</a>
     <form class="film-card__controls">
       <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isActive(isWatchlist)}">Add to watchlist</button>
