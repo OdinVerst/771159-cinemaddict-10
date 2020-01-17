@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component";
 const createFilmsListTitleMarkup = (existFilms) => {
   const existText = `All movies. Upcoming`;
   const noFilmText = `There are no movies in our database`;
-  return `<h2 class="films-list__title ${existFilms ? `visually-hidden` : `` }">${existFilms ? existText : noFilmText}</h2>`;
+  return `<h2 class="films-list__title ${existFilms.length > 0 ? `visually-hidden` : `` }">${existFilms ? existText : noFilmText}</h2>`;
 };
 
 const createFilmsListTemplate = (existFilms) => {
