@@ -1,4 +1,5 @@
 import PageController from "./controllers/page-controller";
+import Preloader from "./components/preloader";
 import Movies from "./models/movies";
 import UserProfile from "./components/user-profile";
 import FilterController from "./controllers/filter-controller";
@@ -16,8 +17,11 @@ const mainElement = document.querySelector(`.main`);
 const headerElement = document.querySelector(`.header`);
 const footerElemet = document.querySelector(`.footer`);
 
+const preloader = new Preloader();
 const moviesModel = new Movies();
 const api = new API(AUTHORIZATION, END_POINT);
+
+render(mainElement, preloader);
 
 const pageController = new PageController(mainElement, moviesModel, api);
 const filterController = new FilterController(mainElement, moviesModel);
@@ -25,6 +29,9 @@ const statisticController = new StatisticsController(mainElement, moviesModel);
 
 api.getMovies()
   .then((movies) => {
+    preloader.getElement().remove();
+    preloader.removeElement();
+
     moviesModel.setMovies(movies);
     render(headerElement, new UserProfile(generateUserRating(movies)));
     filterController.render();

@@ -1,7 +1,7 @@
 import moment from "moment";
-import {MIN_RATING, MAX_RATING} from "../const";
+import {MIN_RATING, MAX_RATING, ValuesControls} from "../const";
 import AbstractSmartComponent from "./abstract-smart-component";
-import {collectNewComment, normalizeTextComment} from "../utils/comment";
+import {collectNewComment, cropComment} from "../utils/comment";
 import {parseDuration} from "../utils/common";
 
 const createCommentsMarkup = (comments) => {
@@ -21,11 +21,11 @@ const createCommentsMarkup = (comments) => {
           <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${normalizeTextComment(text)}</p>
+          <p class="film-details__comment-text">${cropComment(text)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${formatDate(date)}</span>
-            <button data-id="${id}" class="film-details__comment-delete">Delete</button>
+            <button data-id="${id}" class="film-details__comment-delete">${ValuesControls.DELETE.DEFAULT}</button>
           </p>
         </div>
       </li>`;
@@ -99,7 +99,7 @@ const renderUserRatingInputs = (isWatched, userRating, name, poster) => {
 const createFilmPopupTemplate = (film, comments, emoji, textComment) => {
   const {
     name,
-    alternaiveName,
+    alternativeName,
     director,
     rating,
     userRating,
@@ -143,7 +143,7 @@ const createFilmPopupTemplate = (film, comments, emoji, textComment) => {
             <div class="film-details__info-head">
               <div class="film-details__title-wrap">
                 <h3 class="film-details__title">${name}</h3>
-                <p class="film-details__title-original">Original: ${alternaiveName}</p>
+                <p class="film-details__title-original">Original: ${alternativeName}</p>
               </div>
 
               <div class="film-details__rating">
@@ -267,6 +267,7 @@ export default class FilmDetail extends AbstractSmartComponent {
     this._resetWatchedHandler = null;
     this._shakeElement = null;
     this._shakeElementStyle = null;
+    this._shakeElementText = null;
 
     this._container = document.querySelector(`body`);
     this._subscribeOnEvents();
@@ -290,7 +291,8 @@ export default class FilmDetail extends AbstractSmartComponent {
     }
     return {
       element: this._shakeElement,
-      style: this._shakeElementStyle
+      style: this._shakeElementStyle,
+      text: this._shakeElementText
     };
   }
 
@@ -340,8 +342,14 @@ export default class FilmDetail extends AbstractSmartComponent {
         evt.preventDefault();
         this._shakeElement = button;
         this._shakeElementStyle = null;
+        this._shakeElementText = ValuesControls.DELETE.DEFAULT;
         const id = evt.currentTarget.getAttribute(`data-id`);
-        this._deleteButtonClickHandler(id);
+        button.textContent = ValuesControls.DELETE.ACTOINS;
+
+        if (!this._isDisabled) {
+          this._isDisabled = true;
+          this._deleteButtonClickHandler(id);
+        }
       });
     });
   }
