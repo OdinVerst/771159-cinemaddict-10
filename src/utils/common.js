@@ -1,5 +1,5 @@
 import moment from "moment";
-import {COUNT_TOP_MOVIES} from "../const";
+import {COUNT_TOP_MOVIES, MAX_LENGTH_TEXT} from "../const";
 
 export const getCountNumber = (value) => {
   if (isNaN(Number(value)) && !Array.isArray(value)) {
@@ -19,4 +19,11 @@ export const getSortMovies = (list, characteristic) => {
 
 export const parseDuration = (time) => {
   return moment.utc(moment.duration(time, `minutes`).asMilliseconds()).format(`h[h] mm[m]`);
+};
+
+export const cropText = (text) => {
+  if (text.length > MAX_LENGTH_TEXT) {
+    return text.substring(0, MAX_LENGTH_TEXT - 1) + `...`;
+  }
+  return text;
 };

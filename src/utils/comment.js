@@ -1,5 +1,6 @@
 import he from "he";
 import nanoid from "nanoid";
+import {cropText} from "./common";
 
 export const collectNewComment = (text, emoji) => {
   return {
@@ -10,15 +11,7 @@ export const collectNewComment = (text, emoji) => {
   };
 };
 
-export const cropComment = (text) => {
-  const MAX_LENGTH = 140;
-  if (text.length > MAX_LENGTH) {
-    return text.substring(0, MAX_LENGTH - 1) + `...`;
-  }
-  return text;
-};
-
 export const normalizeTextComment = (text) => {
   const encodeText = he.encode(text);
-  return cropComment(encodeText);
+  return cropText(encodeText);
 };

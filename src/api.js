@@ -1,5 +1,6 @@
 import Movie from "./models/movie";
 import Comment from "./models/comment";
+import {ServerCodes} from "./const";
 
 const Methods = {
   GET: `GET`,
@@ -9,7 +10,7 @@ const Methods = {
 };
 
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status >= ServerCodes.SUCCESS && response.status < ServerCodes.REDIRECT) {
     return response;
   } else {
     throw new Error(`${response.status}: ${response.statusText}`);
