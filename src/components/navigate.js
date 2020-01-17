@@ -17,7 +17,7 @@ const createNavigateItemsMarkup = (list) => {
 const createNavigateTemplate = (list) => {
   const isFilterActive = () => {
     const result = list.filter((item) => item.checked);
-    return result.length ? true : false;
+    return !!result.length;
   };
   const navigateItems = createNavigateItemsMarkup(list);
   return `<nav class="main-navigation">

@@ -6,8 +6,12 @@ export const UserRating = [
 ];
 
 export const COUNT_TOP_MOVIES = 2;
-export const MIN_RATING = 1;
-export const MAX_RATING = 9;
+export const Ratings = {
+  MIN: 1,
+  MAX: 9
+};
+
+export const MAX_LENGTH_TEXT = 140;
 
 export const FilterType = {
   ALL: `all`,
@@ -46,4 +50,9 @@ export const ValuesControls = {
     DEFAULT: `Delete`,
     ACTOINS: `Deleting...`
   }
+};
+
+export const ServerCodes = {
+  SUCCESS: 200,
+  REDIRECT: 300
 };
