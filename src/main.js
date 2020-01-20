@@ -13,6 +13,15 @@ import API from "./api";
 const AUTHORIZATION = `Basic testKey=`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then(() => {
+      // Действие, в случае успешной регистрации ServiceWorker
+    }).catch(() => {
+      // Действие, в случае ошибки при регистрации ServiceWorker
+    });
+});
+
 const mainElement = document.querySelector(`.main`);
 const headerElement = document.querySelector(`.header`);
 const footerElemet = document.querySelector(`.footer`);
